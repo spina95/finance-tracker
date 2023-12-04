@@ -1,6 +1,7 @@
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+from google.cloud.firestore_v1.base_query import FieldFilter
 
 from django.conf import settings
 
@@ -47,10 +48,15 @@ class FirebaseClient:
         docs = self._db.collection(collection).order_by(sort_by, direction=order).offset(page).limit(limit).stream()
         return [{**doc.to_dict(), "id": doc.id} for doc in docs]
 
-    def filter(self, collection,field, condition, value):
+    def filter(self, collection, sort_by, order, page, limit, filters):
         """Filter todo using conditions on firestore database"""
-        print(condition)
-        docs = self._db.collection(collection).where(field, condition, value).where('value', '==', 3.50).stream()
+        order = firestore.Query.ASCENDING if order == 'asc' else firestore.Query.DESCENDING
+        docs = docs = self._db.collection(collection).order_by(sort_by, direction=order).offset(page).limit(limit)
+        if filters:
+            for filter in filters:
+                docs = docs.where(filter=FieldFilter(filter[0], filter[1], filter[2]))
+        
+        docs = docs.stream()
         return [{**doc.to_dict(), "id": doc.id} for doc in docs]
     
     def count(self, collection):
