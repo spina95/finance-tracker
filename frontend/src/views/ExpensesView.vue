@@ -33,13 +33,13 @@ export default {
             sortable: true,
           },
           {
-            key: 'type',
+            key: 'category',
             title: 'Type',
             align: 'start',
             sortable: true,
           },
           {
-            key: 'payment',
+            key: 'paymentType',
             title: 'Payment',
             align: 'start',
             sortable: true,
@@ -51,7 +51,7 @@ export default {
             sortable: true,
           }
         ],
-        itemsPerPage: 3,
+        itemsPerPage: 25,
         totalItems: 30
     }
   },
@@ -67,12 +67,12 @@ export default {
       }
       api.expensesAPI.query({
         'order': 'name',
-        'page': (val.page - 1) * val.itemsPerPage,
-        'limit': val.itemsPerPage,
+        'page': (val.page),
+        'size': val.itemsPerPage,
         'sort-by': sortBy,
         'order': order
       }).then(response => {
-        this.data = response.data.data
+        this.data = response.data.results
         this.totalItems = response.data.total_count
       })
         .catch(error => console.log(error))
@@ -229,6 +229,19 @@ export default {
           </v-card>
         </v-dialog>
       </v-toolbar>
+    </template>
+    <template v-slot:item.amount="{ value }">
+        <div style="font-weight: bold;">{{ value }} €</div>
+    </template>
+    <template v-slot:item.category="{ value }">
+      <v-chip :color="value.color">
+        {{ value.name }}
+      </v-chip>
+    </template>
+    <template v-slot:item.paymentType="{ value }">
+      <v-chip :color="value.color">
+        {{ value.name }}
+      </v-chip>
     </template>
   </v-data-table-server>
   </div>

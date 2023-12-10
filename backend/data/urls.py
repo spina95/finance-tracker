@@ -1,8 +1,12 @@
-from data.views import ExpensesViewSet
-from rest_framework.routers import DefaultRouter
+from django.urls import include, path
+from rest_framework import routers
+from .views import ExpenseViewSet, ExpenseCategoriesViewSet, PaymentViewSet
 
-app_name = 'data'
+router = routers.DefaultRouter()
+router.register(r'expenses', ExpenseViewSet, basename="expense")
+router.register(r'expenses-categories', ExpenseCategoriesViewSet, basename="expense-categories")
+router.register(r'payments', PaymentViewSet, basename="payments")
 
-router = DefaultRouter()
-router.register(r'expenses', ExpensesViewSet, basename='expenses')
-urlpatterns = router.urls
+urlpatterns = [
+    path('', include(router.urls)),
+]
