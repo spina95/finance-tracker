@@ -87,37 +87,6 @@ const chartOptions = computed(() => {
   }
 })
 
-const orders = [
-  {
-    amount: '82.5k',
-    title: 'Electronic',
-    avatarColor: 'primary',
-    subtitle: 'Mobile, Earbuds, TV',
-    avatarIcon: 'bx-mobile-alt',
-  },
-  {
-    amount: '23.8k',
-    title: 'Fashion',
-    avatarColor: 'success',
-    subtitle: 'Tshirt, Jeans, Shoes',
-    avatarIcon: 'bx-closet',
-  },
-  {
-    amount: 849,
-    title: 'Decor',
-    avatarColor: 'info',
-    subtitle: 'Fine Art, Dining',
-    avatarIcon: 'bx-home',
-  },
-  {
-    amount: 99,
-    title: 'Sports',
-    avatarColor: 'secondary',
-    subtitle: 'Football, Cricket Kit',
-    avatarIcon: 'bx-football',
-  },
-]
-
 </script>
 
 <script>
@@ -125,12 +94,29 @@ export default {
   data() {
     return {
       expenses: [],
-      currentTab: "2023",
-      tabs: [
+      currentYearTab: "2023",
+      currentMonthTab: null,
+      yearsTabs: [
         "2021",
         "2022",
         "2023",
-        "2024"
+        "2024",
+        "2025"
+      ],
+      monthsTabs: [
+        'All',
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
       ]
     };
   },
@@ -138,9 +124,14 @@ export default {
   methods: {
     async getData() {
       try {
-        const data = axios.get("http://127.0.0.1:8000/api/v1/expenses/categories-total?year=" + this.currentTab).then( response => {
+        const data = axios.get("http://127.0.0.1:8000/api/v1/expenses/categories-total",
+        { params: {
+            'year': this.currentYearTab,
+            'month': this.currentMonthTab != 'All' ? this.currentMonthTab : null,
+        }
+        }).then( response => {
           this.expenses = response.data
-      })
+        })
         
       } catch (error) {
         console.log(error);
@@ -159,18 +150,32 @@ export default {
     <VCardItem class="justify-center text-center">
       <VListItemTitle class="pb-4">YEAR</VListItemTitle>
       <VTabs
-        v-model="currentTab"
+        v-model="currentYearTab"
+        @click="getData()"
+        class="v-tabs-pill "
+      >
+        <v-tab
+          v-for="tab in this.yearsTabs"
+          :key="tab"
+          :value="tab"
+        >
+          {{ tab }}
+        </v-tab>
+      </VTabs>
+      <VTabs
+        v-model="currentMonthTab"
         @click="getData()"
         class="v-tabs-pill"
-      >
-      <v-tab
-        v-for="tab in this.tabs"
-        :key="tab"
-        :value="tab"
-      >
+        >
+        <v-tab
+          v-for="tab in this.monthsTabs"
+          mandatory=False
+          :key="tab"
+          :value="tab"
+        >
         {{ tab }}
       </v-tab>
-    </VTabs>
+      </VTabs>
     </VCardItem>
 
     <VCardText>
