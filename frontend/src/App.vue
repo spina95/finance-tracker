@@ -1,16 +1,12 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import "bootstrap/dist/css/bootstrap.min.css";
+<script setup>
+import { useTheme } from 'vuetify'
+import { hexToRgb } from '@layouts/utils'
 
-import Menu from './views/Menu.vue';
+const { global } = useTheme()
 </script>
 
 <template>
-  <div>
-    <Menu />
-  </div>
-  
+  <VApp :style="`--v-global-theme-primary: ${hexToRgb(global.current.value.colors.primary)}`">
+    <RouterView />
+  </VApp>
 </template>
-
-<style scoped>
-</style>
