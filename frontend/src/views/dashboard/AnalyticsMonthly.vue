@@ -184,7 +184,7 @@ export default {
 
         <!-- bar chart -->
         <VueApexCharts
-          :height="355"
+          :height="405"
           :options="chartOptions.bar"
           :series="this.data"
         />
