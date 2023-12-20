@@ -94,14 +94,14 @@ const upgradeBanner = computed(() => {
       <VerticalNavLink
         :item="{
           title: 'Expenses',
-          icon: 'mdi-currency-usd',
+          icon: 'mdi-cash-multiple',
           to: '/expenses',
         }"
       />
       <VerticalNavLink
         :item="{
           title: 'Incomes',
-          icon: 'mdi-currency-usd',
+          icon: 'mdi-bank',
           to: '/incomes',
         }"
       />
