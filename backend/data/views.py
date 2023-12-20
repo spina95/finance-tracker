@@ -1,59 +1,137 @@
-from rest_framework.exceptions import NotFound
+from django.shortcuts import render
+import datetime
 
-from data.firebase import FirebaseClient
-from data.serializers import TodoSerializer
-from rest_framework import viewsets, status
+# Create your views here.
+from rest_framework import viewsets
+from .models import Expense, ExpenseCategory, PaymentType, Income, IncomeCategory
+from .serializers import ExpenseSerializer, ExpenseCategorySerializer, PaymentTypeSerializer, IncomeSerializer, IncomeCategorySerializer
+from .custom_pagination import CustomPagination
+from .filters import ExpenseFilter, IncomeFilter
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.db.models import Sum
+from django.db.models.functions import TruncMonth
 
 
-class ExpensesViewSet(viewsets.ViewSet):
-    client = FirebaseClient()
-    collection = 'expenses'
 
-    def create(self, request, *args, **kwargs):
-        serializer = TodoSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+class ExpenseViewSet(viewsets.ModelViewSet):
+    queryset = Expense.objects.all()
+    serializer_class = ExpenseSerializer
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_class = ExpenseFilter
+    filterset_fields = ['id', 'name', 'amount', 'date', 'category']
+    search_fields = ['=name', 'intro']
+    ordering_fields = ['name', 'id', 'date', 'category__name', 'amount', 'paymentType__name']
+    ordering = ['id']
 
-        self.client.create(self.collection, serializer.data)
+class ExpenseCategoriesViewSet(viewsets.ModelViewSet):
+    queryset = ExpenseCategory.objects.all()
+    serializer_class = ExpenseCategorySerializer
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['id', 'name']
+    ordering_fields = ['name', 'id']
+    ordering = ['id']
+    
+class PaymentViewSet(viewsets.ModelViewSet):
+    queryset = PaymentType.objects.all()
+    serializer_class = PaymentTypeSerializer
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['id', 'name']
+    ordering_fields = ['name', 'id']
+    ordering = ['id']
+    
+class IncomeCategoriesViewSet(viewsets.ModelViewSet):
+    queryset = IncomeCategory.objects.all()
+    serializer_class = IncomeCategorySerializer
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['id', 'name']
+    ordering_fields = ['name', 'id']
+    ordering = ['id']
 
-        return Response(
-            serializer.data,
-            status=status.HTTP_201_CREATED
-        )
+class IncomeViewSet(viewsets.ModelViewSet):
+    queryset = Income.objects.all()
+    serializer_class = IncomeSerializer
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_class = IncomeFilter
+    filterset_fields = ['id', 'name', 'amount', 'date', 'category']
+    search_fields = ['=name', 'intro']
+    ordering_fields = ['name', 'id', 'date', 'category__name', 'amount', 'paymentType__name']
+    ordering = ['id']
+    
+'''
+Return total amounts per category
+'''
+@api_view(['GET'])
+def total_categories(request):
+    year = request.GET.get('year')
+    total_categories = Expense.objects.filter(date__year=year).values('category__name', 'category__icon', 'category__color').annotate(total_price=Sum('amount')).order_by('-total_price')
+    total = Expense.objects.filter(date__year=year).aggregate(total_price=Sum('amount'))
+    
+    data = {
+        "categories": total_categories,
+        "total": total['total_price']
+    }
+    return Response(data)
 
-    def list(self, request):
-        sort_by = request.GET.get("sort-by")
-        order = request.GET.get("order")
-        page = int(request.GET.get("page"))
-        limit = int(request.GET.get("limit"))
-        instances = self.client.all(self.collection, sort_by=sort_by, order=order, page=page, limit=limit)
-        count = self.client.count(self.collection)
-        serializer = TodoSerializer(instances, many=True)
-        data = {
-            "data": serializer.data,
-            "total_count": count
-        }
-        return Response(data)
+'''
+Return total expenses per month by year
+'''
+@api_view(['GET'])
+def expenses_months(request):
+    year = request.GET.get('year')
+    totals = Expense.objects.filter(date__year=year).annotate(month=TruncMonth("date")).values("month").annotate(amount=Sum("amount")).order_by('month')
+    return Response(totals)
 
-    def retrieve(self, request, pk=None):
-        todo = self.client.get_by_id(self.collection, pk)
+'''
+Return total incomes per month by year
+'''
+@api_view(['GET'])
+def incomes_months(request):
+    year = request.GET.get('year')
+    totals = Income.objects.filter(date__year=year).annotate(month=TruncMonth("date")).values("month").annotate(amount=Sum("amount")).order_by('month')
+    return Response(totals)
 
-        if todo:
-            serializer = TodoSerializer(todo)
-            return Response(serializer.data)
+'''
+Return this month total expenses and increase
+'''
+@api_view(['GET'])
+def month_total_expenses(request):
+    today = datetime.date.today()
+    totals = Expense.objects.filter(date__year=today.year, date__month=today.month).aggregate(amount=Sum("amount"))['amount']
+    
+    first = today.replace(day=1)
+    last_month = first - datetime.timedelta(days=1)
+    last_month_total = Expense.objects.filter(date__year=last_month.year, date__month=last_month.month).aggregate(amount=Sum("amount"))['amount']
+    
+    increase = (totals - last_month_total) / last_month_total * 100
+    data = {
+        'amount': round(totals, 2),
+        'increase': round(increase, 2)
+    }
+    return Response(data)
 
-        raise NotFound(detail="Todo Not Found", code=404)
-
-    def destroy(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
-        self.client.delete_by_id(self.collection, pk)
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-    def update(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
-        serializer = TodoSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        self.client.update(self.collection, pk, serializer.data)
-
-        return Response(serializer.data)
+'''
+Return this month total incomes and increase
+'''
+@api_view(['GET'])
+def month_total_incomes(request):
+    today = datetime.date.today()
+    totals = Income.objects.filter(date__year=today.year, date__month=today.month).aggregate(amount=Sum("amount"))['amount']
+    
+    first = today.replace(day=1)
+    last_month = first - datetime.timedelta(days=1)
+    last_month_total = Income.objects.filter(date__year=last_month.year, date__month=last_month.month).aggregate(amount=Sum("amount"))['amount']
+    
+    increase = (totals - last_month_total) / last_month_total * 100
+    data = {
+        'amount': round(totals, 2),
+        'increase': round(increase, 2)
+    }
+    return Response(data)
