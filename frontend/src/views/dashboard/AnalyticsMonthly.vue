@@ -239,6 +239,7 @@ export default {
           :height="405"
           :options="chartOptions.bar"
           :series="this.data"
+          class="ma-4"
         />
       </VCol>
 

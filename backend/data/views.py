@@ -94,10 +94,11 @@ def expenses_months(request):
     year = request.GET.get('year')
     cash = request.GET.get('cash')
     totals = []
-    if cash == 'false':
-        totals = Expense.objects.filter(date__year=year).exclude(paymentType__name='Cash').annotate(month=TruncMonth("date")).values("month").annotate(amount=Sum("amount")).order_by('month')
-    else:
-        totals = Expense.objects.filter(date__year=year).annotate(month=TruncMonth("date")).values("month").annotate(amount=Sum("amount")).order_by('month')
+    for month in range(1,13):
+        if cash == 'false':
+            totals.append(Expense.objects.filter(date__year=year, date__month=month).exclude(paymentType__name='Cash').aggregate(amount=Sum("amount")))
+        else:
+            totals.append(Expense.objects.filter(date__year=year, date__month=month).aggregate(amount=Sum("amount")))
     return Response(totals)
 
 '''
@@ -107,12 +108,13 @@ Return total incomes per month by year
 def incomes_months(request):
     year = request.GET.get('year')
     cash = request.GET.get('cash')
-    if cash == 'false':
-        totals = Income.objects.filter(date__year=year).exclude(paymentType__name='Cash').annotate(month=TruncMonth("date")).values("month").annotate(amount=Sum("amount")).order_by('month')
-    else:
-        totals = Income.objects.filter(date__year=year).annotate(month=TruncMonth("date")).values("month").annotate(amount=Sum("amount")).order_by('month')
+    totals = []
+    for month in range(1,13):
+        if cash == 'false':
+            totals.append(Income.objects.filter(date__year=year, date__month=month).exclude(paymentType__name='Cash').aggregate(amount=Sum("amount")))
+        else:
+            totals.append(Income.objects.filter(date__year=year, date__month=month).aggregate(amount=Sum("amount")))
     return Response(totals)
-
 '''
 Return this month total expenses and increase
 '''
