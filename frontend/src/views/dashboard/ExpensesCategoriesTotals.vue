@@ -6,13 +6,6 @@ import axios from 'axios';
 
 const vuetifyTheme = useTheme()
 
-const series = [
-  45,
-  80,
-  20,
-  40,
-]
-
 const chartOptions = computed(() => {
   const currentTheme = vuetifyTheme.current.value.colors
   const variableTheme = vuetifyTheme.current.value.variables
@@ -31,12 +24,7 @@ const chartOptions = computed(() => {
     legend: { show: false },
     tooltip: { enabled: false },
     dataLabels: { enabled: false },
-    labels: [
-      'Fashion',
-      'Electronic',
-      'Sports',
-      'Decor',
-    ],
+  
     colors: [
       currentTheme.success,
       currentTheme.primary,
@@ -68,15 +56,16 @@ const chartOptions = computed(() => {
             },
             value: {
               offsetY: -17,
-              fontSize: '24px',
+              fontSize: '17px',
               color: primaryTextColor,
               fontFamily: 'Public Sans',
+              formatter: (val) => {return val + "€";}
+
             },
             total: {
-              show: true,
+              show: false,
               label: 'Weekly',
               fontSize: '14px',
-              formatter: () => '38%',
               color: disabledTextColor,
               fontFamily: 'Public Sans',
             },
@@ -94,6 +83,8 @@ export default {
   data() {
     return {
       expenses: [],
+      labels: [],
+      series: [],
       currentYearTab: "2023",
       currentMonthTab: null,
       yearsTabs: [
@@ -131,6 +122,13 @@ export default {
         }
         }).then( response => {
           this.expenses = response.data
+          this.series = []
+          this.labels = []
+          for (var i in response.data.categories) {
+              this.series.push(response.data.categories[i].total_price)
+              this.labels.push(response.data.categories[i].category__name)
+          } 
+          this.$refs.realtimeChart.updateOptions({ labels: this.labels, });
         })
         
       } catch (error) {
@@ -147,8 +145,8 @@ export default {
 
 <template>
   <VCard>
+    <VCardTitle class="mt-4">Expenses Categories</VCardTitle>
     <VCardItem class="justify-center text-center">
-      <VListItemTitle class="pb-4">YEAR</VListItemTitle>
       <VTabs
         v-model="currentYearTab"
         @click="getData()"
@@ -165,7 +163,7 @@ export default {
       <VTabs
         v-model="currentMonthTab"
         @click="getData()"
-        class="v-tabs-pill"
+        class="v-tabs-pill mt-4"
         >
         <v-tab
           v-for="tab in this.monthsTabs"
@@ -189,11 +187,13 @@ export default {
 
         <div>
           <VueApexCharts
+            ref="realtimeChart" 
             type="donut"
             :height="125"
             width="105"
             :options="chartOptions"
             :series="series"
+            :labels="labels"
           />
         </div>
       </div>

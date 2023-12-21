@@ -12,6 +12,7 @@ const vuetifyTheme = useTheme()
 const display = useDisplay()
 
 const chartOptions = computed(() => {
+  vuetifyTheme.current.theme
   const currentTheme = vuetifyTheme.current.value.colors
   const variableTheme = vuetifyTheme.current.value.variables
   const disabledTextColor = `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['disabled-opacity'] })`
@@ -33,6 +34,7 @@ const chartOptions = computed(() => {
         width: 1,
         
       },
+      
       legend: {
         offsetX: -10,
         position: 'top',
@@ -55,7 +57,8 @@ const chartOptions = computed(() => {
       },
       tooltip: {
         shared: true,
-        intersect: false
+        intersect: false,
+        theme: 'dark'
       },
       plotOptions: {
         bar: {
@@ -249,7 +252,5 @@ export default {
 </template>
 
 <style lang="scss">
-#bar-chart .apexcharts-series[rel="2"] {
-  transform: translateY(-10px);
-}
+
 </style>
