@@ -92,7 +92,12 @@ Return total expenses per month by year
 @api_view(['GET'])
 def expenses_months(request):
     year = request.GET.get('year')
-    totals = Expense.objects.filter(date__year=year).annotate(month=TruncMonth("date")).values("month").annotate(amount=Sum("amount")).order_by('month')
+    cash = request.GET.get('cash')
+    totals = []
+    if cash == 'false':
+        totals = Expense.objects.filter(date__year=year).exclude(paymentType__name='Cash').annotate(month=TruncMonth("date")).values("month").annotate(amount=Sum("amount")).order_by('month')
+    else:
+        totals = Expense.objects.filter(date__year=year).annotate(month=TruncMonth("date")).values("month").annotate(amount=Sum("amount")).order_by('month')
     return Response(totals)
 
 '''
@@ -101,7 +106,11 @@ Return total incomes per month by year
 @api_view(['GET'])
 def incomes_months(request):
     year = request.GET.get('year')
-    totals = Income.objects.filter(date__year=year).annotate(month=TruncMonth("date")).values("month").annotate(amount=Sum("amount")).order_by('month')
+    cash = request.GET.get('cash')
+    if cash == 'false':
+        totals = Income.objects.filter(date__year=year).exclude(paymentType__name='Cash').annotate(month=TruncMonth("date")).values("month").annotate(amount=Sum("amount")).order_by('month')
+    else:
+        totals = Income.objects.filter(date__year=year).annotate(month=TruncMonth("date")).values("month").annotate(amount=Sum("amount")).order_by('month')
     return Response(totals)
 
 '''

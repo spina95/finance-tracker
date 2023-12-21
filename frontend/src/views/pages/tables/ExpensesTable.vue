@@ -107,8 +107,8 @@ export default {
 <template>
   <div>
     <v-data-table-server
-    fixed-header
-    height="700px"
+      fixed-header
+      height="700px"
       v-model:items-per-page="itemsPerPage"
       :headers="headers"
       :items-length="totalItems"

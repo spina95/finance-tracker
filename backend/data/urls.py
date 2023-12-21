@@ -14,6 +14,6 @@ urlpatterns = [
     path('expenses/categories-total', total_categories),
     path('expenses/months', expenses_months),
     path('incomes/months', incomes_months),
-    path('expenses/current-month', month_total_expenses),
-    path('incomes/current-month', month_total_incomes),
+    path('current-month-expenses', month_total_expenses),
+    path('current-month-incomes', month_total_incomes),
 ]

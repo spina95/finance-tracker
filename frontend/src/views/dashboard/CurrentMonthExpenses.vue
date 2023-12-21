@@ -14,7 +14,7 @@ export default {
   methods: {
     async getData() {
       try {
-        const data = axios.get("http://127.0.0.1:8000/api/v1/expenses/current-month").then( response => {
+        const data = axios.get("http://127.0.0.1:8000/api/v1/current-month-expenses").then( response => {
           this.data = response.data
       })
         
