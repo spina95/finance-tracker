@@ -69,13 +69,6 @@ const upgradeBanner = computed(() => {
     </template>
 
     <template #vertical-nav-content>
-      <VerticalNavLink
-        :item="{
-          title: 'Dashboard',
-          icon: 'bx-home',
-          to: '/dashboard2',
-        }"
-      />
       
       <VerticalNavLink
         :item="{
@@ -91,6 +84,15 @@ const upgradeBanner = computed(() => {
           heading: 'Finance',
         }"
       />
+
+      <VerticalNavLink
+        :item="{
+          title: 'Dashboard',
+          icon: 'bx-home',
+          to: '/dashboard2',
+        }"
+      />
+
       <VerticalNavLink
         :item="{
           title: 'Expenses',
@@ -103,6 +105,12 @@ const upgradeBanner = computed(() => {
           title: 'Incomes',
           icon: 'mdi-bank',
           to: '/incomes',
+        }"
+      />
+
+      <VerticalNavSectionTitle
+        :item="{
+          heading: 'Investments',
         }"
       />
 
