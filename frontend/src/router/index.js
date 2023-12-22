@@ -29,6 +29,10 @@ const router = createRouter({
           component: () => import('../pages/investments/products.vue'),
         },
         {
+          path: 'new-product',
+          component: () => import('../pages/investments/new-product.vue'),
+        },
+        {
           path: 'account-settings',
           component: () => import('../pages/account-settings.vue'),
         },
