@@ -25,12 +25,6 @@ const chartOptions = computed(() => {
     tooltip: { enabled: false },
     dataLabels: { enabled: false },
   
-    colors: [
-      currentTheme.success,
-      currentTheme.primary,
-      currentTheme.secondary,
-      currentTheme.info,
-    ],
     grid: {
       padding: {
         top: -7,
@@ -124,11 +118,15 @@ export default {
           this.expenses = response.data
           this.series = []
           this.labels = []
+          var colors = []
           for (var i in response.data.categories) {
               this.series.push(response.data.categories[i].total_price)
               this.labels.push(response.data.categories[i].category__name)
+              colors.push(response.data.categories[i].category__color)
+
           } 
           this.$refs.realtimeChart.updateOptions({ labels: this.labels, });
+          this.$refs.realtimeChart.updateOptions({ colors: colors, });
         })
         
       } catch (error) {
