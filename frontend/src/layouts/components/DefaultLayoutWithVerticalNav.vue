@@ -69,6 +69,14 @@ const upgradeBanner = computed(() => {
     </template>
 
     <template #vertical-nav-content>
+      
+      <!-- 👉 User Interface -->
+      <VerticalNavSectionTitle
+        :item="{
+          heading: 'Finance',
+        }"
+      />
+
       <VerticalNavLink
         :item="{
           title: 'Dashboard',
@@ -76,33 +84,40 @@ const upgradeBanner = computed(() => {
           to: '/dashboard2',
         }"
       />
-      
-      <VerticalNavLink
-        :item="{
-          title: 'Account Settings',
-          icon: 'mdi-account-cog-outline',
-          to: '/account-settings',
-        }"
-      />
 
-      <!-- 👉 User Interface -->
-      <VerticalNavSectionTitle
-        :item="{
-          heading: 'Finance',
-        }"
-      />
       <VerticalNavLink
         :item="{
           title: 'Expenses',
-          icon: 'mdi-currency-usd',
+          icon: 'mdi-cash-multiple',
           to: '/expenses',
         }"
       />
       <VerticalNavLink
         :item="{
           title: 'Incomes',
-          icon: 'mdi-currency-usd',
+          icon: 'mdi-bank',
           to: '/incomes',
+        }"
+      />
+
+      <VerticalNavSectionTitle
+        :item="{
+          heading: 'Investments',
+        }"
+      />
+
+      <!-- 👉 Settings -->
+      <VerticalNavSectionTitle
+        :item="{
+          heading: 'Settings',
+        }"
+      />
+
+      <VerticalNavLink
+        :item="{
+          title: 'Account Settings',
+          icon: 'mdi-account-cog-outline',
+          to: '/account-settings',
         }"
       />
 

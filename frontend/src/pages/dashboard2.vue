@@ -37,6 +37,14 @@ import wallet from '@images/cards/wallet-info.png'
         <VCol
           cols="12"
           md="12"
+          class="text-center"
+        >
+          CURRENT MONTH
+        </VCol>
+
+        <VCol
+          cols="12"
+          md="12"
         >
           <CurrentMonthExpenses/>
         </VCol>
