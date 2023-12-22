@@ -70,14 +70,6 @@ const upgradeBanner = computed(() => {
 
     <template #vertical-nav-content>
       
-      <VerticalNavLink
-        :item="{
-          title: 'Account Settings',
-          icon: 'mdi-account-cog-outline',
-          to: '/account-settings',
-        }"
-      />
-
       <!-- 👉 User Interface -->
       <VerticalNavSectionTitle
         :item="{
@@ -111,6 +103,21 @@ const upgradeBanner = computed(() => {
       <VerticalNavSectionTitle
         :item="{
           heading: 'Investments',
+        }"
+      />
+
+      <!-- 👉 Settings -->
+      <VerticalNavSectionTitle
+        :item="{
+          heading: 'Settings',
+        }"
+      />
+
+      <VerticalNavLink
+        :item="{
+          title: 'Account Settings',
+          icon: 'mdi-account-cog-outline',
+          to: '/account-settings',
         }"
       />
 
