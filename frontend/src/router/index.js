@@ -10,19 +10,23 @@ const router = createRouter({
       children: [
         {
           path: 'dashboard2',
-          component: () => import('../pages/dashboard2.vue'),
+          component: () => import('../pages/finance/dashboard.vue'),
         },
         {
           path: 'dashboard',
-          component: () => import('../pages/dashboard.vue'),
+          component: () => import('../pages/dashboard-demo.vue'),
         },
         {
           path: 'expenses',
-          component: () => import('../pages/expenses.vue'),
+          component: () => import('../pages/finance/expenses.vue'),
         },
         {
           path: 'incomes',
-          component: () => import('../pages/incomes.vue'),
+          component: () => import('../pages/finance/incomes.vue'),
+        },
+        {
+          path: 'products',
+          component: () => import('../pages/investments/products.vue'),
         },
         {
           path: 'account-settings',

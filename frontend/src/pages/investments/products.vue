@@ -1,12 +1,12 @@
 <script setup>
-import IncomesTable from '@/views/pages/tables/IncomesTable.vue'
+import ProcutsTable from '@/views/pages/tables/ProductsTable.vue'
 </script>
 
 <template>
   <VRow>
     <VCol cols="12">
-      <VCard title="Incomes">
-        <IncomesTable />
+      <VCard title="Products">
+        <ProcutsTable />
       </VCard>
     </VCol>
   </VRow>

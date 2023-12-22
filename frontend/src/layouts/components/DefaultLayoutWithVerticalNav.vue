@@ -106,6 +106,14 @@ const upgradeBanner = computed(() => {
         }"
       />
 
+      <VerticalNavLink
+        :item="{
+          title: 'Products',
+          icon: 'mdi-finance',
+          to: '/products',
+        }"
+      />
+
       <!-- 👉 Settings -->
       <VerticalNavSectionTitle
         :item="{

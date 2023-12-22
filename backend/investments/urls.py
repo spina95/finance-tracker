@@ -1,19 +1,11 @@
 from django.urls import include, path
 from rest_framework import routers
-from .views import ExpenseViewSet, ExpenseCategoriesViewSet, PaymentViewSet, IncomeViewSet, IncomeCategoriesViewSet, total_categories, expenses_months, incomes_months, month_total_expenses, month_total_incomes
+from .views import ProductViewSet, ProductCategoriesViewSet
 
 router = routers.DefaultRouter()
-router.register(r'expenses', ExpenseViewSet, basename="expense")
-router.register(r'expenses-categories', ExpenseCategoriesViewSet, basename="expense-categories")
-router.register(r'payments', PaymentViewSet, basename="payments")
-router.register(r'incomes', IncomeViewSet, basename="incomes")
-router.register(r'income-categories', IncomeCategoriesViewSet, basename="income-categories")
+router.register(r'products', ProductViewSet, basename="products")
+router.register(r'products-categories', ProductCategoriesViewSet, basename="products-categories")
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('expenses/categories-total', total_categories),
-    path('expenses/months', expenses_months),
-    path('incomes/months', incomes_months),
-    path('current-month-expenses', month_total_expenses),
-    path('current-month-incomes', month_total_incomes),
 ]
