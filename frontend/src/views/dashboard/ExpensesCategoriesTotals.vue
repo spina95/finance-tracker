@@ -109,7 +109,7 @@ export default {
   methods: {
     async getData() {
       try {
-        const data = axios.get("http://127.0.0.1:8000/api/v1/expenses/categories-total",
+        const data = axios.get("http://127.0.0.1:8000/api/v1/data/expenses/categories-total",
         { params: {
             'year': this.currentYearTab,
             'month': this.currentMonthTab != 'All' ? this.currentMonthTab : null,

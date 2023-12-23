@@ -147,7 +147,7 @@ export default {
     async getData() {
       try {
         var values = []
-        const data = axios.get("http://127.0.0.1:8000/api/v1/expenses/months",
+        const data = axios.get("http://127.0.0.1:8000/api/v1/data/expenses/months",
         { params: {
             'year': this.currentYearTab,
             'cash': this.cashCheck,
@@ -159,7 +159,7 @@ export default {
               data: expenses,
             }
           )
-          const data = axios.get("http://127.0.0.1:8000/api/v1/incomes/months",
+          const data = axios.get("http://127.0.0.1:8000/api/v1/data/incomes/months",
           { params: {
             'year': this.currentYearTab,
             'cash': this.cashCheck,

@@ -3,26 +3,34 @@ import { createRouter, createWebHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', redirect: '/dashboard' },
+    { path: '/', redirect: '/finance/dashboard' },
     {
       path: '/',
       component: () => import('../layouts/default.vue'),
       children: [
         {
-          path: 'dashboard2',
-          component: () => import('../pages/dashboard2.vue'),
+          path: 'finance/dashboard',
+          component: () => import('../pages/finance/dashboard.vue'),
         },
         {
           path: 'dashboard',
-          component: () => import('../pages/dashboard.vue'),
+          component: () => import('../pages/dashboard-demo.vue'),
         },
         {
-          path: 'expenses',
-          component: () => import('../pages/expenses.vue'),
+          path: 'finance/expenses',
+          component: () => import('../pages/finance/expenses.vue'),
         },
         {
-          path: 'incomes',
-          component: () => import('../pages/incomes.vue'),
+          path: 'finance/incomes',
+          component: () => import('../pages/finance/incomes.vue'),
+        },
+        {
+          path: 'investments/products',
+          component: () => import('../pages/investments/products.vue'),
+        },
+        {
+          path: 'investments/new-product',
+          component: () => import('../pages/investments/new-product.vue'),
         },
         {
           path: 'account-settings',
