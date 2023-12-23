@@ -9,7 +9,7 @@ class ProductCategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
     
 class ProductSerializer(serializers.ModelSerializer):
-    category = ProductCategory()
+    category = ProductCategorySerializer()
     class Meta:
         model = Product
         fields = '__all__'
@@ -19,5 +19,5 @@ class ProductSerializer(serializers.ModelSerializer):
         category_data = validated_data.pop('category')
         category, created = ProductCategory.objects.get_or_create(**category_data)
         
-        expense = Product.objects.create(category=category, **validated_data)
-        return expense
+        product = Product.objects.create(category=category, **validated_data)
+        return product
