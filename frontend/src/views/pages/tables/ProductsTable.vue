@@ -125,7 +125,9 @@ export default {
     </template>
     <template v-slot:item.link="{ value }">
       <div v-if="value">
-        <a v-bind:href="value" target="_blank" rel="noreferrer">link</a>
+        <a v-bind:href="value" target="_blank" rel="noreferrer">
+          <v-icon icon="mdi-link"></v-icon>
+        </a>
       </div>
     </template>
   </v-data-table-server>

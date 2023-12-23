@@ -37,6 +37,7 @@ export default {
         try {
         axios.post("http://127.0.0.1:8000/api/v1/investments/products/", data).then( response => {
           console.log(response)
+          this.$router.push("/products");
         })
             
         } catch (error) {
