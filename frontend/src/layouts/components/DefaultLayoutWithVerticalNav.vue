@@ -81,7 +81,7 @@ const upgradeBanner = computed(() => {
         :item="{
           title: 'Dashboard',
           icon: 'bx-home',
-          to: '/dashboard2',
+          to: '/finance/dashboard',
         }"
       />
 
@@ -89,14 +89,14 @@ const upgradeBanner = computed(() => {
         :item="{
           title: 'Expenses',
           icon: 'mdi-cash-multiple',
-          to: '/expenses',
+          to: '/finance/expenses',
         }"
       />
       <VerticalNavLink
         :item="{
           title: 'Incomes',
           icon: 'mdi-bank',
-          to: '/incomes',
+          to: '/finance/incomes',
         }"
       />
 
@@ -110,7 +110,7 @@ const upgradeBanner = computed(() => {
         :item="{
           title: 'Products',
           icon: 'mdi-finance',
-          to: '/products',
+          to: '/investments/products',
         }"
       />
 

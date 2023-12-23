@@ -9,7 +9,7 @@ const router = createRouter({
       component: () => import('../layouts/default.vue'),
       children: [
         {
-          path: 'dashboard2',
+          path: 'finance/dashboard',
           component: () => import('../pages/finance/dashboard.vue'),
         },
         {
@@ -17,19 +17,19 @@ const router = createRouter({
           component: () => import('../pages/dashboard-demo.vue'),
         },
         {
-          path: 'expenses',
+          path: 'finance/expenses',
           component: () => import('../pages/finance/expenses.vue'),
         },
         {
-          path: 'incomes',
+          path: 'finance/incomes',
           component: () => import('../pages/finance/incomes.vue'),
         },
         {
-          path: 'products',
+          path: 'investments/products',
           component: () => import('../pages/investments/products.vue'),
         },
         {
-          path: 'new-product',
+          path: 'investments/new-product',
           component: () => import('../pages/investments/new-product.vue'),
         },
         {
