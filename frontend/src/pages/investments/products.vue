@@ -18,15 +18,12 @@ import ProcutsTable from '@/views/pages/tables/ProductsTable.vue'
               custom
               v-slot="{ navigate }"
             >
-              
-                <v-btn 
-                  density="compact" 
-                  icon="mdi-plus" 
-                  @click="navigate"
-                  role="link"></v-btn>
-              
-                  
-            </router-link>
+              <v-btn 
+                density="compact" 
+                icon="mdi-plus" 
+                @click="navigate"
+                role="link"></v-btn>
+           </router-link>
           </v-row>
         </v-col>
         </VCardTitle>
