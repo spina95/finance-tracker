@@ -20,14 +20,14 @@ export default {
         data: [],
         headers: [
           {
-            key: 'amount',
-            title: 'Amount',
+            key: 'name',
+            title: 'Name',
             align: 'start',
             sortable: true,
           },
           {
-            key: 'name',
-            title: 'Name',
+            key: 'ticker',
+            title: 'Ticker',
             align: 'start',
             sortable: true,
           },
@@ -38,16 +38,10 @@ export default {
             sortable: false,
           },
           {
-            key: 'paymentType',
-            title: 'Payment',
+            key: 'link',
+            title: 'Link',
             align: 'start',
             sortable: false,
-          },
-          {
-            key: 'date',
-            title: 'Date',
-            align: 'start',
-            sortable: true,
           }
         ],
         itemsPerPage: 25,
@@ -67,7 +61,7 @@ export default {
           sortBy = val.sortBy[0].key
         }        
       }
-      api.expensesAPI.query({
+      api.productsAPI.query({
         'page': (val.page),
         'size': val.itemsPerPage,
         'ordering': sortBy,
@@ -76,7 +70,6 @@ export default {
         this.totalItems = response.data.count
       })
         .catch(error => console.log(error))
-      
       },
 
       close () {
@@ -95,6 +88,10 @@ export default {
         console.log('handlePageChange')
         this.updateTableData();
       }, 
+      openDetails(item, row) {
+        console.log(row.item.id)
+        this.$router.push("/investments/products/" + row.item.id)
+      }
   },
   watch: {
     dialog: function(val){
@@ -120,40 +117,23 @@ export default {
       @update:options="loadItems"
       class="elevation-1"
       style="border-radius: 8px;"
+      @click:row="openDetails"
     >
   
     <template v-slot:header.calories="{ header }">
   <v-text-field label="search calories" @click.stop />
 </template>
-    <template v-slot:item.amount="{ value }">
-        <div style="font-weight: bold;">{{ value }} €</div>
-    </template>
     <template v-slot:item.category="{ value }">
-      <VAvatar
-          rounded
-          variant="tonal"
-          :color="value.color"
-          class="me-3"
-        >
-        <VIcon :icon="value.icon" />
-      </VAvatar>
-
       <v-chip :color="value.color">
         {{ value.name }}
       </v-chip>
     </template>
-    <template v-slot:item.paymentType="{ value }">
-      <VAvatar
-          rounded
-          variant="tonal"
-          :color="value.color"
-          class="me-3"
-        >
-        <VIcon :icon="value.icon" />
-      </VAvatar>
-      <v-chip :color="value.color">
-        {{ value.name }}
-      </v-chip>
+    <template v-slot:item.link="{ value }">
+      <div v-if="value">
+        <a v-bind:href="value" target="_blank" rel="noreferrer">
+          <v-icon icon="mdi-link"></v-icon>
+        </a>
+      </div>
     </template>
   </v-data-table-server>
   </div>

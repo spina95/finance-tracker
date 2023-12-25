@@ -14,7 +14,7 @@ from rest_framework.response import Response
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth
 
-
+from .utils import month_name_to_number
 
 class ExpenseViewSet(viewsets.ModelViewSet):
     queryset = Expense.objects.all()
@@ -71,8 +71,14 @@ Return total amounts per category
 @api_view(['GET'])
 def total_categories(request):
     year = request.GET.get('year')
-    total_categories = Expense.objects.filter(date__year=year).values('category__name', 'category__icon', 'category__color').annotate(total_price=Sum('amount')).order_by('-total_price')
-    total = Expense.objects.filter(date__year=year).aggregate(total_price=Sum('amount'))
+    month = request.GET.get('month')
+    if month:
+        month = month_name_to_number(month)
+        total_categories = Expense.objects.filter(date__year=year, date__month=month).values('category__name', 'category__icon', 'category__color').annotate(total_price=Sum('amount')).order_by('-total_price')
+        total = Expense.objects.filter(date__year=year, date__month=month).aggregate(total_price=Sum('amount'))
+    else:
+        total_categories = Expense.objects.filter(date__year=year).values('category__name', 'category__icon', 'category__color').annotate(total_price=Sum('amount')).order_by('-total_price')
+        total = Expense.objects.filter(date__year=year).aggregate(total_price=Sum('amount'))
     
     data = {
         "categories": total_categories,
@@ -86,7 +92,13 @@ Return total expenses per month by year
 @api_view(['GET'])
 def expenses_months(request):
     year = request.GET.get('year')
-    totals = Expense.objects.filter(date__year=year).annotate(month=TruncMonth("date")).values("month").annotate(amount=Sum("amount")).order_by('month')
+    cash = request.GET.get('cash')
+    totals = []
+    for month in range(1,13):
+        if cash == 'false':
+            totals.append(Expense.objects.filter(date__year=year, date__month=month).exclude(paymentType__name='Cash').aggregate(amount=Sum("amount")))
+        else:
+            totals.append(Expense.objects.filter(date__year=year, date__month=month).aggregate(amount=Sum("amount")))
     return Response(totals)
 
 '''
@@ -95,9 +107,14 @@ Return total incomes per month by year
 @api_view(['GET'])
 def incomes_months(request):
     year = request.GET.get('year')
-    totals = Income.objects.filter(date__year=year).annotate(month=TruncMonth("date")).values("month").annotate(amount=Sum("amount")).order_by('month')
+    cash = request.GET.get('cash')
+    totals = []
+    for month in range(1,13):
+        if cash == 'false':
+            totals.append(Income.objects.filter(date__year=year, date__month=month).exclude(paymentType__name='Cash').aggregate(amount=Sum("amount")))
+        else:
+            totals.append(Income.objects.filter(date__year=year, date__month=month).aggregate(amount=Sum("amount")))
     return Response(totals)
-
 '''
 Return this month total expenses and increase
 '''

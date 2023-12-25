@@ -69,40 +69,63 @@ const upgradeBanner = computed(() => {
     </template>
 
     <template #vertical-nav-content>
-      <VerticalNavLink
-        :item="{
-          title: 'Dashboard',
-          icon: 'bx-home',
-          to: '/dashboard2',
-        }"
-      />
       
-      <VerticalNavLink
-        :item="{
-          title: 'Account Settings',
-          icon: 'mdi-account-cog-outline',
-          to: '/account-settings',
-        }"
-      />
-
       <!-- 👉 User Interface -->
       <VerticalNavSectionTitle
         :item="{
           heading: 'Finance',
         }"
       />
+
+      <VerticalNavLink
+        :item="{
+          title: 'Dashboard',
+          icon: 'bx-home',
+          to: '/finance/dashboard',
+        }"
+      />
+
       <VerticalNavLink
         :item="{
           title: 'Expenses',
-          icon: 'mdi-currency-usd',
-          to: '/expenses',
+          icon: 'mdi-cash-multiple',
+          to: '/finance/expenses',
         }"
       />
       <VerticalNavLink
         :item="{
           title: 'Incomes',
-          icon: 'mdi-currency-usd',
-          to: '/incomes',
+          icon: 'mdi-bank',
+          to: '/finance/incomes',
+        }"
+      />
+
+      <VerticalNavSectionTitle
+        :item="{
+          heading: 'Investments',
+        }"
+      />
+
+      <VerticalNavLink
+        :item="{
+          title: 'Products',
+          icon: 'mdi-finance',
+          to: '/investments/products',
+        }"
+      />
+
+      <!-- 👉 Settings -->
+      <VerticalNavSectionTitle
+        :item="{
+          heading: 'Settings',
+        }"
+      />
+
+      <VerticalNavLink
+        :item="{
+          title: 'Account Settings',
+          icon: 'mdi-account-cog-outline',
+          to: '/account-settings',
         }"
       />
 

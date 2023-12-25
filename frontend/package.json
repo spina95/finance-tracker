@@ -1,11 +1,11 @@
 {
-  "name": "sneat-vuetify-vuejs-admin-template",
+  "name": "financetracker",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
-    "preview": "vite preview --port 5050",
+    "preview": "vite preview --host --port 5050",
     "lint": "eslint . -c .eslintrc.js --fix --ext .ts,.js,.vue,.tsx,.jsx",
     "build:icons": "node src/@iconify/build-icons.js",
     "postinstall": "npm run build:icons"

@@ -6,13 +6,6 @@ import axios from 'axios';
 
 const vuetifyTheme = useTheme()
 
-const series = [
-  45,
-  80,
-  20,
-  40,
-]
-
 const chartOptions = computed(() => {
   const currentTheme = vuetifyTheme.current.value.colors
   const variableTheme = vuetifyTheme.current.value.variables
@@ -31,18 +24,7 @@ const chartOptions = computed(() => {
     legend: { show: false },
     tooltip: { enabled: false },
     dataLabels: { enabled: false },
-    labels: [
-      'Fashion',
-      'Electronic',
-      'Sports',
-      'Decor',
-    ],
-    colors: [
-      currentTheme.success,
-      currentTheme.primary,
-      currentTheme.secondary,
-      currentTheme.info,
-    ],
+  
     grid: {
       padding: {
         top: -7,
@@ -68,15 +50,16 @@ const chartOptions = computed(() => {
             },
             value: {
               offsetY: -17,
-              fontSize: '24px',
+              fontSize: '17px',
               color: primaryTextColor,
               fontFamily: 'Public Sans',
+              formatter: (val) => {return val + "€";}
+
             },
             total: {
-              show: true,
+              show: false,
               label: 'Weekly',
               fontSize: '14px',
-              formatter: () => '38%',
               color: disabledTextColor,
               fontFamily: 'Public Sans',
             },
@@ -87,37 +70,6 @@ const chartOptions = computed(() => {
   }
 })
 
-const orders = [
-  {
-    amount: '82.5k',
-    title: 'Electronic',
-    avatarColor: 'primary',
-    subtitle: 'Mobile, Earbuds, TV',
-    avatarIcon: 'bx-mobile-alt',
-  },
-  {
-    amount: '23.8k',
-    title: 'Fashion',
-    avatarColor: 'success',
-    subtitle: 'Tshirt, Jeans, Shoes',
-    avatarIcon: 'bx-closet',
-  },
-  {
-    amount: 849,
-    title: 'Decor',
-    avatarColor: 'info',
-    subtitle: 'Fine Art, Dining',
-    avatarIcon: 'bx-home',
-  },
-  {
-    amount: 99,
-    title: 'Sports',
-    avatarColor: 'secondary',
-    subtitle: 'Football, Cricket Kit',
-    avatarIcon: 'bx-football',
-  },
-]
-
 </script>
 
 <script>
@@ -125,12 +77,31 @@ export default {
   data() {
     return {
       expenses: [],
-      currentTab: "2023",
-      tabs: [
+      labels: [],
+      series: [],
+      currentYearTab: "2023",
+      currentMonthTab: null,
+      yearsTabs: [
         "2021",
         "2022",
         "2023",
-        "2024"
+        "2024",
+        "2025"
+      ],
+      monthsTabs: [
+        'All',
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
       ]
     };
   },
@@ -138,9 +109,25 @@ export default {
   methods: {
     async getData() {
       try {
-        const data = axios.get("http://127.0.0.1:8000/api/v1/expenses/categories-total?year=" + this.currentTab).then( response => {
+        const data = axios.get("http://127.0.0.1:8000/api/v1/data/expenses/categories-total",
+        { params: {
+            'year': this.currentYearTab,
+            'month': this.currentMonthTab != 'All' ? this.currentMonthTab : null,
+        }
+        }).then( response => {
           this.expenses = response.data
-      })
+          this.series = []
+          this.labels = []
+          var colors = []
+          for (var i in response.data.categories) {
+              this.series.push(response.data.categories[i].total_price)
+              this.labels.push(response.data.categories[i].category__name)
+              colors.push(response.data.categories[i].category__color)
+
+          } 
+          this.$refs.realtimeChart.updateOptions({ labels: this.labels, });
+          this.$refs.realtimeChart.updateOptions({ colors: colors, });
+        })
         
       } catch (error) {
         console.log(error);
@@ -156,21 +143,35 @@ export default {
 
 <template>
   <VCard>
+    <VCardTitle class="mt-4">Expenses Categories</VCardTitle>
     <VCardItem class="justify-center text-center">
-      <VListItemTitle class="pb-4">YEAR</VListItemTitle>
       <VTabs
-        v-model="currentTab"
+        v-model="currentYearTab"
         @click="getData()"
-        class="v-tabs-pill"
+        class="v-tabs-pill "
       >
-      <v-tab
-        v-for="tab in this.tabs"
-        :key="tab"
-        :value="tab"
-      >
+        <v-tab
+          v-for="tab in this.yearsTabs"
+          :key="tab"
+          :value="tab"
+        >
+          {{ tab }}
+        </v-tab>
+      </VTabs>
+      <VTabs
+        v-model="currentMonthTab"
+        @click="getData()"
+        class="v-tabs-pill mt-4"
+        >
+        <v-tab
+          v-for="tab in this.monthsTabs"
+          mandatory=False
+          :key="tab"
+          :value="tab"
+        >
         {{ tab }}
       </v-tab>
-    </VTabs>
+      </VTabs>
     </VCardItem>
 
     <VCardText>
@@ -184,11 +185,13 @@ export default {
 
         <div>
           <VueApexCharts
+            ref="realtimeChart" 
             type="donut"
             :height="125"
             width="105"
             :options="chartOptions"
             :series="series"
+            :labels="labels"
           />
         </div>
       </div>

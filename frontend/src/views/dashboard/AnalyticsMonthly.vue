@@ -12,6 +12,7 @@ const vuetifyTheme = useTheme()
 const display = useDisplay()
 
 const chartOptions = computed(() => {
+  vuetifyTheme.current.theme
   const currentTheme = vuetifyTheme.current.value.colors
   const variableTheme = vuetifyTheme.current.value.variables
   const disabledTextColor = `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['disabled-opacity'] })`
@@ -33,6 +34,7 @@ const chartOptions = computed(() => {
         width: 1,
         
       },
+      
       legend: {
         offsetX: -10,
         position: 'top',
@@ -55,7 +57,8 @@ const chartOptions = computed(() => {
       },
       tooltip: {
         shared: true,
-        intersect: false
+        intersect: false,
+        theme: 'dark'
       },
       plotOptions: {
         bar: {
@@ -128,6 +131,15 @@ export default {
   data() {
     return {
       data: [],
+      cashCheck: false,
+      yearsTabs: [
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025"
+      ],
+      currentYearTab: "2023"
     };
   },
 
@@ -135,7 +147,11 @@ export default {
     async getData() {
       try {
         var values = []
-        const data = axios.get("http://127.0.0.1:8000/api/v1/expenses/months?year=2023").then( response => {
+        const data = axios.get("http://127.0.0.1:8000/api/v1/data/expenses/months",
+        { params: {
+            'year': this.currentYearTab,
+            'cash': this.cashCheck,
+        }}).then( response => {
           const expenses = Array.from(response.data,(val,index)=> val.amount );  
           values.push(
             {
@@ -143,7 +159,11 @@ export default {
               data: expenses,
             }
           )
-          const data = axios.get("http://127.0.0.1:8000/api/v1/incomes/months?year=2023").then( response => {
+          const data = axios.get("http://127.0.0.1:8000/api/v1/data/incomes/months",
+          { params: {
+            'year': this.currentYearTab,
+            'cash': this.cashCheck,
+          }}).then( response => {
           const incomes = Array.from(response.data,(val,index)=> val.amount );  
           values.push(
             {
@@ -164,6 +184,11 @@ export default {
   created() {
     this.getData();
   },
+  watch: {
+    cashCheck: function(val){
+      this.getData()
+    }
+  }
 };
 </script>
 
@@ -176,17 +201,48 @@ export default {
         xl="12"
         :class="$vuetify.display.smAndUp ? 'border-e' : 'border-b'"
       >
-        <VCardItem class="pb-0">
+        <VCardItem>
           <VCardTitle>Total Revenue</VCardTitle>
 
-          
+            <div class="justify-center w-100 align-middle">
+              <v-row align="center" justify="center">
+                <VTabs
+                v-model="currentYearTab"
+                @click="getData()"
+                align-tabs="center"
+                class="v-tabs-pill"
+              >
+                <v-tab
+                  v-for="tab in this.yearsTabs"
+                  :key="tab"
+                  :value="tab"
+                >
+                  {{ tab }}
+                </v-tab>
+              </VTabs>
+
+              <v-spacer/>
+
+              <v-col cols="auto">
+                <v-btn 
+                  density="default" 
+                  icon="mdi-cash"
+                  v-bind:color="cashCheck === true ? 'success' : 'grey-300'"
+                  @click="cashCheck = !cashCheck"
+                  >
+                  
+                </v-btn>
+              </v-col>
+              </v-row>
+            </div>     
         </VCardItem>
 
         <!-- bar chart -->
         <VueApexCharts
-          :height="355"
+          :height="405"
           :options="chartOptions.bar"
           :series="this.data"
+          class="ma-4"
         />
       </VCol>
 
@@ -196,7 +252,5 @@ export default {
 </template>
 
 <style lang="scss">
-#bar-chart .apexcharts-series[rel="2"] {
-  transform: translateY(-10px);
-}
+
 </style>
