@@ -29,6 +29,10 @@ const router = createRouter({
           component: () => import('../pages/investments/products.vue'),
         },
         {
+          path: 'investments/products/:id',
+          component: () => import('../pages/investments/product-details.vue'),
+        },
+        {
           path: 'investments/new-product',
           component: () => import('../pages/investments/new-product.vue'),
         },

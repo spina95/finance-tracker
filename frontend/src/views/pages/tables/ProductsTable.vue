@@ -88,6 +88,10 @@ export default {
         console.log('handlePageChange')
         this.updateTableData();
       }, 
+      openDetails(item, row) {
+        console.log(row.item.id)
+        this.$router.push("/investments/products/" + row.item.id)
+      }
   },
   watch: {
     dialog: function(val){
@@ -113,6 +117,7 @@ export default {
       @update:options="loadItems"
       class="elevation-1"
       style="border-radius: 8px;"
+      @click:row="openDetails"
     >
   
     <template v-slot:header.calories="{ header }">
