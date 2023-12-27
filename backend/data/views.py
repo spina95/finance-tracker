@@ -95,10 +95,13 @@ def expenses_months(request):
     cash = request.GET.get('cash')
     totals = []
     for month in range(1,13):
+        value = None
         if cash == 'false':
-            totals.append(Expense.objects.filter(date__year=year, date__month=month).exclude(paymentType__name='Cash').aggregate(amount=Sum("amount")))
+            value = Expense.objects.filter(date__year=year, date__month=month).exclude(paymentType__name='Cash').aggregate(amount=Sum("amount"))
         else:
-            totals.append(Expense.objects.filter(date__year=year, date__month=month).aggregate(amount=Sum("amount")))
+            value = Expense.objects.filter(date__year=year, date__month=month).aggregate(amount=Sum("amount"))
+        value = value if value else 0
+        totals.append(value)
     return Response(totals)
 
 '''
@@ -110,10 +113,13 @@ def incomes_months(request):
     cash = request.GET.get('cash')
     totals = []
     for month in range(1,13):
+        value = None
         if cash == 'false':
-            totals.append(Income.objects.filter(date__year=year, date__month=month).exclude(paymentType__name='Cash').aggregate(amount=Sum("amount")))
+            value = (Income.objects.filter(date__year=year, date__month=month).exclude(paymentType__name='Cash').aggregate(amount=Sum("amount")))
         else:
-            totals.append(Income.objects.filter(date__year=year, date__month=month).aggregate(amount=Sum("amount")))
+            value = (Income.objects.filter(date__year=year, date__month=month).aggregate(amount=Sum("amount")))
+        value = value if value else 0
+        totals.append(value)
     return Response(totals)
 '''
 Return this month total expenses and increase
