@@ -2,7 +2,6 @@
 import VueApexCharts from 'vue3-apexcharts'
 import { useTheme } from 'vuetify'
 import { hexToRgb } from '@layouts/utils'
-import axios from 'axios';
 
 const vuetifyTheme = useTheme()
 
@@ -109,7 +108,7 @@ export default {
   methods: {
     async getData() {
       try {
-        const data = axios.get("http://127.0.0.1:8000/api/v1/data/expenses/categories-total",
+        const data = this.axios.get("/data/expenses/categories-total",
         { params: {
             'year': this.currentYearTab,
             'month': this.currentMonthTab != 'All' ? this.currentMonthTab : null,

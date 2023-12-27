@@ -5,7 +5,6 @@ import {
   useTheme,
 } from 'vuetify'
 import { hexToRgb } from '@layouts/utils'
-import axios from 'axios';
 import { toHandlers } from 'vue';
 
 const vuetifyTheme = useTheme()
@@ -102,7 +101,7 @@ export default {
      
 
       try {
-        const data = axios.get("http://127.0.0.1:8000/api/v1/investments/products/" + this.productId + "/history").then( response => {
+        const data = this.axios.get("/investments/products/" + this.productId + "/history").then( response => {
           const values = [{
               name: "Desktops",
               data: response.data.history.Open
