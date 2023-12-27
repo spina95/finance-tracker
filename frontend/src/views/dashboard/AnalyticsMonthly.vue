@@ -5,7 +5,6 @@ import {
   useTheme,
 } from 'vuetify'
 import { hexToRgb } from '@layouts/utils'
-import axios from 'axios';
 import { toHandlers } from 'vue';
 
 const vuetifyTheme = useTheme()
@@ -147,7 +146,7 @@ export default {
     async getData() {
       try {
         var values = []
-        const data = axios.get("http://127.0.0.1:8000/api/v1/data/expenses/months",
+        const data = this.axios.get("/data/expenses/months",
         { params: {
             'year': this.currentYearTab,
             'cash': this.cashCheck,
@@ -159,7 +158,7 @@ export default {
               data: expenses,
             }
           )
-          const data = axios.get("http://127.0.0.1:8000/api/v1/data/incomes/months",
+          const data = this.axios.get("/data/incomes/months",
           { params: {
             'year': this.currentYearTab,
             'cash': this.cashCheck,

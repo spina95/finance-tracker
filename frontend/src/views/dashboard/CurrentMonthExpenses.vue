@@ -1,5 +1,4 @@
 <script setup>
-import axios from 'axios';
 import wallet from '@images/cards/wallet-info.png'
 </script>
 
@@ -14,7 +13,7 @@ export default {
   methods: {
     async getData() {
       try {
-        const data = axios.get("http://127.0.0.1:8000/api/v1/data/current-month-expenses").then( response => {
+        const data = this.axios.get("/data/current-month-expenses").then( response => {
           this.data = response.data
       })
         

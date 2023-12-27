@@ -1,5 +1,4 @@
 <script setup>
-import axios from 'axios';
 
 </script>
 
@@ -19,10 +18,10 @@ export default {
   methods: {
     async getData() {
       try {
-        axios.get("http://127.0.0.1:8000/api/v1/investments/products/" + this.productId).then( response => {
+        this.axios.get("/investments/products/" + this.productId).then( response => {
           this.product = response.data
         })
-        const data = axios.get("http://127.0.0.1:8000/api/v1/investments/products/" + this.productId + "/info").then( response => {
+        const data = this.get("/investments/products/" + this.productId + "/info").then( response => {
           const values = [
             {"City": response.data.info.city},
             {"State": response.data.info.state},

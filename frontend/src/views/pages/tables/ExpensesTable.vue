@@ -1,5 +1,4 @@
 <script>
-import axios from 'axios';
 import { computed, nextTick, ref, watch } from 'vue'
 import api from '@/common/api'
 

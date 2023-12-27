@@ -1,5 +1,4 @@
 <script setup>
-import axios from 'axios';
 
 </script>
 
@@ -18,7 +17,7 @@ export default {
   methods: {
     async getData() {
       try {
-        const data = axios.get("http://127.0.0.1:8000/api/v1/investments/products-categories").then( response => {
+        const data = this.axios.get("/investments/products-categories").then( response => {
           this.categories = response.data.results
       })
         
@@ -35,7 +34,7 @@ export default {
             "category": this.category
         }
         try {
-        axios.post("http://127.0.0.1:8000/api/v1/investments/products/", data).then( response => {
+        this.axios.post("/investments/products/", data).then( response => {
           console.log(response)
           this.$router.push("/investments/products");
         })
