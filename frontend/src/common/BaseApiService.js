@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 export default class BaseApiService {
-    baseUrl = "http://127.0.0.1:8000/api/v1";
+    baseUrl = import.meta.env.VITE_APP_BASE_URL || 'https://finance-tracker-567ntiy4ya-ew.a.run.app';
     resource;
 
     constructor(resource) {
       if (!resource) throw new Error("Resource is not provided");
       this.resource = resource;
-      axios.defaults.baseURL = "http://127.0.0.1:8000/api/v1";
+      axios.defaults.baseURL = import.meta.env.VITE_APP_BASE_URL || 'https://finance-tracker-567ntiy4ya-ew.a.run.app';
       axios.defaults.headers = {
         'Content-Type': 'application/json',
     }
