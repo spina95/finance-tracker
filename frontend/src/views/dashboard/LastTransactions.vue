@@ -18,7 +18,7 @@ export default {
   methods: {
     async getData() {
       try {
-        const data = axios.get("http://127.0.0.1:8000/api/v1/data/expenses/?size=8&page=1&ordering=-date").then( response => {
+        const data = axios.get("/data/expenses/?size=8&page=1&ordering=-date").then( response => {
           this.expenses = response.data.results
       })
         
