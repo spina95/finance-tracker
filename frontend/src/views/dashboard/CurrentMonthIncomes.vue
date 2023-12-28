@@ -13,7 +13,7 @@ export default {
   methods: {
     async getData() {
       try {
-        const data = this.axios.get("/data/current-month-incomes").then( response => {
+        const data = this.axios.get("data/current-month-incomes").then( response => {
           this.data = response.data
       })
         

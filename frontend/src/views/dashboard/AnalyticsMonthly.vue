@@ -158,7 +158,7 @@ export default {
               data: expenses,
             }
           )
-          const data = this.axios.get("/data/incomes/months",
+          const data = this.axios.get("data/incomes/months",
           { params: {
             'year': this.currentYearTab,
             'cash': this.cashCheck,
