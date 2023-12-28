@@ -213,8 +213,10 @@ export default {
               >
                 <v-tab
                   v-for="tab in this.yearsTabs"
+                  v-if="this.yearsTabs"
                   :key="tab"
                   :value="tab"
+                  
                 >
                   {{ tab }}
                 </v-tab>

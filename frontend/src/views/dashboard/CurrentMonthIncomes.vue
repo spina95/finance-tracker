@@ -34,8 +34,8 @@ export default {
       v-bind="{
         title: 'Incomes',
         image: card,
-        stats: this.data.amount ? this.data.amount + ' €' : '0 €',
-        change: this.data.increase,
+        stats: this.data?.amount ? this.data?.amount + ' €' : '0 €',
+        change: this.data?.increase,
       }"
   />
 </template>
