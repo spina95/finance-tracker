@@ -150,8 +150,8 @@ export default {
         class="v-tabs-pill "
       >
         <v-tab
-          v-for="tab in this.yearsTabs"
-          v-if="this.yearsTabs"
+          v-for="tab in yearsTabs"
+          v-if="yearsTabs"
           :key="tab"
           :value="tab"
         >
@@ -164,8 +164,7 @@ export default {
         class="v-tabs-pill mt-4"
         >
         <v-tab
-          v-for="tab in this.monthsTabs"
-          v-if="this.monthsTabs"
+          v-for="tab in monthsTabs"
           mandatory=False
           :key="tab"
           :value="tab"
