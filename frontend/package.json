@@ -36,7 +36,8 @@
     "vue3-apexcharts": "^1.4.1",
     "vue3-perfect-scrollbar": "^1.6.0",
     "vuetify": "3.4.0",
-    "webfontloader": "^1.6.28"
+    "webfontloader": "^1.6.28",
+    "webpack": "^5.82.0"
   },
   "devDependencies": {
     "@antfu/eslint-config-vue": "^0.39.1",
@@ -81,8 +82,5 @@
   "packageManager": "yarn@1.22.18",
   "resolutions": {
     "postcss": "8"
-  },
-  "overrides": {
-    "webpack":"5.82.1"
- }
+  }
 }
