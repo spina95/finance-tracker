@@ -212,8 +212,8 @@ export default {
                 class="v-tabs-pill"
               >
                 <v-tab
-                  v-for="tab in this.yearsTabs"
-                  v-if="this.yearsTabs"
+                  v-for="tab in yearsTabs"
+                  v-if="yearsTabs"
                   :key="tab"
                   :value="tab"
                   
@@ -240,11 +240,11 @@ export default {
 
         <!-- bar chart -->
         <div
-        v-if="this.chartData">
+        v-if="chartData">
         <VueApexCharts
         :height="405"
         :options="chartOptions.bar"
-        :series="this.chartData"
+        :series="chartData"
         
         class="ma-4"
       />
