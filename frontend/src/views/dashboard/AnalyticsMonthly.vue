@@ -129,7 +129,7 @@ const chartOptions = computed(() => {
 export default {
   data() {
     return {
-      data: [],
+      chartData: [],
       cashCheck: false,
       yearsTabs: [
         "2021",
@@ -170,7 +170,7 @@ export default {
               data: incomes,
             }
           )
-          this.data = values
+          this.chartData = values
       })  
       })
         
@@ -239,12 +239,17 @@ export default {
         </VCardItem>
 
         <!-- bar chart -->
+        <div
+        v-if="this.chartData">
         <VueApexCharts
-          :height="405"
-          :options="chartOptions.bar"
-          :series="this.data"
-          class="ma-4"
-        />
+        :height="405"
+        :options="chartOptions.bar"
+        :series="this.chartData"
+        
+        class="ma-4"
+      />
+        </div>
+        
       </VCol>
 
       
