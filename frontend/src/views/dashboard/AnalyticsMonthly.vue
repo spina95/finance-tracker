@@ -203,7 +203,7 @@ export default {
         <VCardItem>
           <VCardTitle>Total Revenue</VCardTitle>
 
-            <div class="justify-center w-100 align-middle">
+            <div class="justify-center w-100 align-middle mt-4">
               <v-row align="center" justify="center">
                 <VTabs
                 v-model="currentYearTab"
