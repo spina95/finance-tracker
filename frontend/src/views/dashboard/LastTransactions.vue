@@ -4,7 +4,6 @@ import creditCardSuccess from '@images/cards/credit-card-success.png'
 import creditCardWarning from '@images/cards/credit-card-warning.png'
 import paypalError from '@images/cards/paypal-error.png'
 import walletPrimary from '@images/cards/wallet-primary.png'
-import axios from 'axios';
 </script>
 
 <script>
@@ -18,7 +17,7 @@ export default {
   methods: {
     async getData() {
       try {
-        const data = axios.get("/data/expenses/?size=8&page=1&ordering=-date").then( response => {
+        const data = this.axios.get("/data/expenses/?size=10&page=1&ordering=-date").then( response => {
           this.expenses = response.data.results
       })
         

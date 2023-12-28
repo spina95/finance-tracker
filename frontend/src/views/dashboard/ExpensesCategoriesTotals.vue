@@ -108,7 +108,7 @@ export default {
   methods: {
     async getData() {
       try {
-        const data = this.axios.get("/data/expenses/categories-total",
+        const data = this.axios.get("data/expenses/categories-total",
         { params: {
             'year': this.currentYearTab,
             'month': this.currentMonthTab != 'All' ? this.currentMonthTab : null,
