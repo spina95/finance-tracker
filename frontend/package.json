@@ -81,5 +81,8 @@
   "packageManager": "yarn@1.22.18",
   "resolutions": {
     "postcss": "8"
-  }
+  },
+  "overrides": {
+    "webpack":"5.82.1"
+ }
 }
