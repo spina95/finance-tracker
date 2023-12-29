@@ -31,12 +31,11 @@ const upgradeBanner = computed(() => {
           <VIcon icon="bx-menu" />
         </IconBtn>
 
-        <!-- 👉 Search -->
+        <!--  Searchbar hidden
         <div
           class="d-flex align-center cursor-pointer"
           style="user-select: none;"
         >
-          <!-- 👉 Search Trigger button -->
           <IconBtn>
             <VIcon icon="bx-search" />
           </IconBtn>
@@ -46,20 +45,16 @@ const upgradeBanner = computed(() => {
             <span class="meta-key">&#8984;K</span>
           </span>
         </div>
-
+        -->
         <VSpacer />
 
         <IconBtn
           class="me-2"
-          href="https://github.com/themeselection/sneat-vuetify-vuejs-admin-template-free"
+          href="https://github.com/spina95/finance-tracker"
           target="_blank"
           rel="noopener noreferrer"
         >
           <VIcon icon="bxl-github" />
-        </IconBtn>
-
-        <IconBtn class="me-2">
-          <VIcon icon="bx-bell" />
         </IconBtn>
 
         <NavbarThemeSwitcher class="me-2" />
@@ -108,13 +103,23 @@ const upgradeBanner = computed(() => {
 
       <VerticalNavLink
         :item="{
-          title: 'Products',
+          title: 'My products',
           icon: 'mdi-finance',
           to: '/investments/products',
         }"
       />
 
-      <!-- 👉 Settings -->
+      <VerticalNavLink
+        :item="{
+          title: 'Portfolio',
+          icon: 'mdi-chart-pie',
+          to: '/investments/portfolio',
+        }"
+      />
+
+      <!--
+        
+      
       <VerticalNavSectionTitle
         :item="{
           heading: 'Settings',
@@ -128,8 +133,8 @@ const upgradeBanner = computed(() => {
           to: '/account-settings',
         }"
       />
+      */
 
-      <!-- 👉 Pages -->
       <VerticalNavSectionTitle
         :item="{
           heading: 'Pages',
@@ -166,7 +171,6 @@ const upgradeBanner = computed(() => {
         }"
       />
 
-      <!-- 👉 User Interface -->
       <VerticalNavSectionTitle
         :item="{
           heading: 'User Interface',
@@ -208,6 +212,8 @@ const upgradeBanner = computed(() => {
           to: '/form-layouts',
         }"
       />
+      -->
+
     </template>
 
     <template #after-vertical-nav-items>
@@ -221,6 +227,7 @@ const upgradeBanner = computed(() => {
   
       </a>
     </template>
+    
 
     <!-- 👉 Pages -->
     <slot />

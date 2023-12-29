@@ -51,13 +51,15 @@ export default {
         ],
         itemsPerPage: 25,
         totalItems: 30,
-        categoriesTotals: []
+        categoriesTotals: [],
+        loading: true
     }
   },
     
 
   methods: {
     loadItems (val)  {
+      this.data = []
       var sortBy = null
       if (val.sortBy[0]){
         if (val.sortBy[0].order == 'desc') {
@@ -73,6 +75,7 @@ export default {
       }).then(response => {
         this.data = response.data.results
         this.totalItems = response.data.count
+        this.loading = false
       })
         .catch(error => console.log(error))
       
@@ -112,7 +115,7 @@ export default {
       :headers="headers"
       :items-length="totalItems"
       :items="data"
-      :loading="loading"
+      :loading="!data.length"
       :search="search"
       item-value="name"
       hide-default-footer
@@ -136,9 +139,6 @@ export default {
         >
         <VIcon :icon="value.icon" />
       </VAvatar>
-      <v-chip :color="value.color">
-        {{ value.name }}
-      </v-chip>
     </template>
     <template v-slot:item.paymentType="{ value }">
       <VAvatar
@@ -149,9 +149,6 @@ export default {
         >
         <VIcon :icon="value.icon" />
       </VAvatar>
-      <v-chip :color="value.color">
-        {{ value.name }}
-      </v-chip>
     </template>
   </v-data-table-server>
   </div>
