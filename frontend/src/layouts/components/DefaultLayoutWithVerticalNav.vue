@@ -31,12 +31,11 @@ const upgradeBanner = computed(() => {
           <VIcon icon="bx-menu" />
         </IconBtn>
 
-        <!-- 👉 Search -->
+        <!--  Searchbar hidden
         <div
           class="d-flex align-center cursor-pointer"
           style="user-select: none;"
         >
-          <!-- 👉 Search Trigger button -->
           <IconBtn>
             <VIcon icon="bx-search" />
           </IconBtn>
@@ -46,7 +45,7 @@ const upgradeBanner = computed(() => {
             <span class="meta-key">&#8984;K</span>
           </span>
         </div>
-
+        -->
         <VSpacer />
 
         <IconBtn
@@ -104,9 +103,17 @@ const upgradeBanner = computed(() => {
 
       <VerticalNavLink
         :item="{
-          title: 'Products',
+          title: 'My products',
           icon: 'mdi-finance',
           to: '/investments/products',
+        }"
+      />
+
+      <VerticalNavLink
+        :item="{
+          title: 'Portfolio',
+          icon: 'mdi-chart-pie',
+          to: '/investments/portfolio',
         }"
       />
 
