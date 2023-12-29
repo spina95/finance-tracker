@@ -51,15 +51,11 @@ const upgradeBanner = computed(() => {
 
         <IconBtn
           class="me-2"
-          href="https://github.com/themeselection/sneat-vuetify-vuejs-admin-template-free"
+          href="https://github.com/spina95/finance-tracker"
           target="_blank"
           rel="noopener noreferrer"
         >
           <VIcon icon="bxl-github" />
-        </IconBtn>
-
-        <IconBtn class="me-2">
-          <VIcon icon="bx-bell" />
         </IconBtn>
 
         <NavbarThemeSwitcher class="me-2" />
@@ -114,7 +110,9 @@ const upgradeBanner = computed(() => {
         }"
       />
 
-      <!-- 👉 Settings -->
+      <!--
+        
+      
       <VerticalNavSectionTitle
         :item="{
           heading: 'Settings',
@@ -128,8 +126,8 @@ const upgradeBanner = computed(() => {
           to: '/account-settings',
         }"
       />
+      */
 
-      <!-- 👉 Pages -->
       <VerticalNavSectionTitle
         :item="{
           heading: 'Pages',
@@ -166,7 +164,6 @@ const upgradeBanner = computed(() => {
         }"
       />
 
-      <!-- 👉 User Interface -->
       <VerticalNavSectionTitle
         :item="{
           heading: 'User Interface',
@@ -208,6 +205,8 @@ const upgradeBanner = computed(() => {
           to: '/form-layouts',
         }"
       />
+      -->
+
     </template>
 
     <template #after-vertical-nav-items>
@@ -221,6 +220,7 @@ const upgradeBanner = computed(() => {
   
       </a>
     </template>
+    
 
     <!-- 👉 Pages -->
     <slot />

@@ -18,7 +18,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
     >
       <VImg :src="avatar1" />
 
-      <!-- SECTION Menu -->
+      <!-- DEACTIVATED MENU
       <VMenu
         activator="parent"
         width="230"
@@ -26,7 +26,6 @@ import avatar1 from '@images/avatars/avatar-1.png'
         offset="14px"
       >
         <VList>
-          <!-- 👉 User Avatar & Name -->
           <VListItem>
             <template #prepend>
               <VListItemAction start>
@@ -54,7 +53,6 @@ import avatar1 from '@images/avatars/avatar-1.png'
           </VListItem>
           <VDivider class="my-2" />
 
-          <!-- 👉 Profile -->
           <VListItem link>
             <template #prepend>
               <VIcon
@@ -67,7 +65,6 @@ import avatar1 from '@images/avatars/avatar-1.png'
             <VListItemTitle>Profile</VListItemTitle>
           </VListItem>
 
-          <!-- 👉 Settings -->
           <VListItem link>
             <template #prepend>
               <VIcon
@@ -80,7 +77,6 @@ import avatar1 from '@images/avatars/avatar-1.png'
             <VListItemTitle>Settings</VListItemTitle>
           </VListItem>
 
-          <!-- 👉 Pricing -->
           <VListItem link>
             <template #prepend>
               <VIcon
@@ -93,7 +89,6 @@ import avatar1 from '@images/avatars/avatar-1.png'
             <VListItemTitle>Pricing</VListItemTitle>
           </VListItem>
 
-          <!-- 👉 FAQ -->
           <VListItem link>
             <template #prepend>
               <VIcon
@@ -106,10 +101,8 @@ import avatar1 from '@images/avatars/avatar-1.png'
             <VListItemTitle>FAQ</VListItemTitle>
           </VListItem>
 
-          <!-- Divider -->
           <VDivider class="my-2" />
 
-          <!-- 👉 Logout -->
           <VListItem to="/login">
             <template #prepend>
               <VIcon
@@ -123,6 +116,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
           </VListItem>
         </VList>
       </VMenu>
+      -->
       <!-- !SECTION -->
     </VAvatar>
   </VBadge>
