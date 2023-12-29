@@ -1,10 +1,11 @@
 import csv
 import requests
 import json
-categories = requests.get("http://127.0.0.1:8000/api/v1/expenses-categories/").json()
+base_url = 'https://finance-tracker-567ntiy4ya-ew.a.run.app' # 'http://127.0.0.1:8000'
+categories = requests.get(base_url + "/data/expenses-categories/").json()
 categories = {x['name']: x for x in categories['results']}
 
-payments = requests.get("http://127.0.0.1:8000/api/v1/payments/").json()
+payments = requests.get(base_url + "/data/payments/").json()
 payments = {x['name']: x for x in payments['results']}
 
 with open("Notion.csv", encoding="utf8") as csvfile:
@@ -24,4 +25,4 @@ with open("Notion.csv", encoding="utf8") as csvfile:
             "paymentType": payment
         }
         
-        expense = requests.post("http://127.0.0.1:8000/api/v1/expenses/", json=data)
+        expense = requests.post(base_url + "/data/expenses/", json=data)
