@@ -16,10 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from .views import import_notion_expenses
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('data/', include('data.urls')),
-    path('investments/', include('investments.urls')),
-    path('automations/', include('automations.urls')),
+    path('import-expenses', import_notion_expenses),
 ]

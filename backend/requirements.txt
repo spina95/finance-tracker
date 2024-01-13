@@ -10,3 +10,4 @@ yfinance
 django-environ
 psycopg
 psycopg-binary
+django-crontab

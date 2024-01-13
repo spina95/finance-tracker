@@ -55,9 +55,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     "django_filters",
+    'django_crontab',    
     
     'data',
-    'investments'
+    'investments',
+    'automations',
 ]
 
 MIDDLEWARE = [
@@ -155,3 +157,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CRONJOBS = [
+    # Example: Run a job every day at midnight
+    ('* * * * *', 'backend.tasks.task'),
+]
