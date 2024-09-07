@@ -111,6 +111,9 @@ DATABASES = {
         'PASSWORD': env('DATABASE_PASS'),
         'HOST': env('DATABASE_HOST'),
         'PORT': env('DATABASE_PORT'),
+        'OPTIONS': {
+            'sslmode': 'verify-full'
+        },
     }
 }
 
