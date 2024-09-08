@@ -7,8 +7,8 @@ class Automations(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     success = models.BooleanField()
-    
- 
+    exception = models.TextField(null=True, blank=True)
+
     class Meta:
         db_table = "automations"
         ordering = ['start_time']

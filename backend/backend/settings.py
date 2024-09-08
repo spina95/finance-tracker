@@ -57,7 +57,8 @@ INSTALLED_APPS = [
     "django_filters",
     
     'data',
-    'investments'
+    'investments',
+    'automations',
 ]
 
 MIDDLEWARE = [
