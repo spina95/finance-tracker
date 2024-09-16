@@ -18,6 +18,10 @@ export default class ModelApiService extends ReadOnlyApiService {
         });
     }
 
+    async getById(id, params) {
+        return axios.get(this.getUrl(id), params);
+    }
+
     async post(data) {
         return axios.post(this.getUrl(), data=data);
     }
@@ -26,12 +30,12 @@ export default class ModelApiService extends ReadOnlyApiService {
         return axios.put(this.getUrl(id), params);
     }
 
-    async put(params) {
-        return axios.put(this.getUrl(), params);
+    async put(id, data) {
+        return axios.put(this.getUrl(id), data);
     }
 
-    async delete(resource) {
-        return axios.delete(resource).catch(error => {
+    async delete(id) {
+        return axios.delete(this.getUrl(id)).catch(error => {
             throw new Error(`[RWV] ApiService ${error}`);
         });
     }

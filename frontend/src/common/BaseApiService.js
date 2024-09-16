@@ -13,8 +13,9 @@ export default class BaseApiService {
     }
     }
   
-    getUrl(id = "") {
-      return `${this.baseUrl}/${this.resource}/${id}`;
+    getUrl(id) {
+      if (id) return `${this.baseUrl}/${this.resource}/${id}/`;
+      return `${this.baseUrl}/${this.resource}/`;
     }
   
     handleErrors(err) {

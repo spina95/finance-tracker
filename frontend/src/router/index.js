@@ -9,6 +9,14 @@ const router = createRouter({
       component: () => import('../layouts/default.vue'),
       children: [
         {
+          path: 'personal/journal',
+          component: () => import('../pages/personal/Journal.vue'),
+        },
+        {
+          path: 'personal/journal/:id',
+          component: () => import('../pages/personal/JournalDetail.vue'),
+        },
+        {
           path: 'finance/dashboard',
           component: () => import('../pages/finance/dashboard.vue'),
         },

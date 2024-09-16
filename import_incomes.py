@@ -8,7 +8,7 @@ categories = {x['name']: x for x in categories['results']}
 payments = requests.get(base_url + "/data/payments/").json()
 payments = {x['name']: x for x in payments['results']}
 
-with open("incomes.csv", encoding="utf8") as csvfile:
+with open("/Users/andreaspinazzola/Documents/Projects/Finance Tracker/Notion Expenses Incomes.csv", encoding="utf8") as csvfile:
     csvreader = csv.reader(csvfile, delimiter=",")
     next(csvreader, None)
 
@@ -26,3 +26,4 @@ with open("incomes.csv", encoding="utf8") as csvfile:
         }
         
         expense = requests.post(base_url + "/data/incomes/", json=data)
+        pass

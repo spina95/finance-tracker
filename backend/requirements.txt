@@ -14,3 +14,4 @@ psycopg-binary
 apscheduler
 django-cockroachdb==3.2.1
 psycopg2-binary==2.9.9
+django-rest-swagger
