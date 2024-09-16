@@ -64,6 +64,21 @@ const upgradeBanner = computed(() => {
     </template>
 
     <template #vertical-nav-content>
+
+      <!-- 👉 User Interface -->
+      <VerticalNavSectionTitle
+        :item="{
+          heading: 'Personal',
+        }"
+      />
+
+      <VerticalNavLink
+        :item="{
+          title: 'Journal',
+          icon: 'bx-book-heart',
+          to: '/personal/journal',
+        }"
+      />
       
       <!-- 👉 User Interface -->
       <VerticalNavSectionTitle
