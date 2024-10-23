@@ -1,7 +1,4 @@
-import 'package:demo_app/add_expense_page.dart';
-import 'package:demo_app/expenses_incomes_chart_widget.dart';
 import 'package:demo_app/expenses_page.dart';
-import 'package:demo_app/month_expenses_widget.dart';
 import 'package:demo_app/theme.dart';
 import 'package:flutter/material.dart';
 

@@ -49,11 +49,12 @@ class _CategoriesExpensesWidgetState extends State<CategoriesExpensesWidget> {
       title: "Categories",
       content: Column(
         children: [
-          Text("October 2024",
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall!
-                  .copyWith(fontWeight: FontWeight.bold)),
+          Text(
+            "October 2024",
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  fontWeight: FontWeight.w500,
+                ),
+          ),
           const SizedBox(height: 8.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -136,25 +137,6 @@ class _CategoriesExpensesWidgetState extends State<CategoriesExpensesWidget> {
                     style: Theme.of(context).textTheme.bodyLarge!),
               ),
             ),
-          const Divider(),
-          InkWell(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "View all",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
-          ),
         ],
       ),
     );

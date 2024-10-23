@@ -187,10 +187,10 @@ class _ExpenseIncomesChartWidgetState extends State<ExpenseIncomesChartWidget> {
                         icon: const Icon(Icons.keyboard_arrow_left),
                       ),
                       Text("2024",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall!
-                              .copyWith(fontWeight: FontWeight.bold)),
+                          style:
+                              Theme.of(context).textTheme.titleLarge!.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                  )),
                       IconButton(
                         onPressed: () {},
                         icon: const Icon(Icons.keyboard_arrow_right),

@@ -119,25 +119,6 @@ class _MonthExpensesWidgetState extends State<MonthExpensesWidget> {
                       ),
                     ),
                   ),
-                  const Divider(),
-                  InkWell(
-                    onTap: () {},
-                    child: Container(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "View all",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                 ],
               )
             else
