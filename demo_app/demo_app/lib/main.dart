@@ -1,3 +1,8 @@
+import 'package:demo_app/add_expense_page.dart';
+import 'package:demo_app/expenses_incomes_chart_widget.dart';
+import 'package:demo_app/expenses_page.dart';
+import 'package:demo_app/month_expenses_widget.dart';
+import 'package:demo_app/theme.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,22 +15,8 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text("test"),
-          centerTitle: true,
-        ),
-        body: ListView(
-          shrinkWrap: true,
-          children: const [
-            Text('Hello, World!'),
-            SizedBox(height: 16),
-            Text('This is a simple Flutter app.'),
-            SizedBox(height: 16),
-            Text('Tap anywhere to add a new item.'),
-          ],
-        ),
-      ),
+      theme: myTheme,
+      home: const ExpensesPage(),
     );
   }
 }
