@@ -32,13 +32,14 @@ class _ExpensesPageState extends State<ExpensesPage> {
           ),
         ],
       ),
-      body: ListView(
-        shrinkWrap: true,
-        children: const [
-          ExpenseIncomesChartWidget(),
-          CategoriesExpensesWidget(),
-          MonthExpensesWidget(),
-        ],
+      body: const SingleChildScrollView(
+        child: Column(
+          children: [
+            ExpenseIncomesChartWidget(),
+            CategoriesExpensesWidget(),
+            MonthExpensesWidget(),
+          ],
+        ),
       ),
     );
   }
