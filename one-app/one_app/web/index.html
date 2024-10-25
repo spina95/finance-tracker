@@ -32,6 +32,13 @@
   <title>one_app</title>
   <link rel="manifest" href="manifest.json">
 </head>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('flutter-first-frame', function () {
+      navigator.serviceWorker.register('/flutter_service_worker.js?v=<timestamp>'); // replace '<timestamp>' with your latest version/timestamp
+    });
+  }
+</script>
 <body>
   <script src="flutter_bootstrap.js" async></script>
 </body>
