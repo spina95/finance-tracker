@@ -41,3 +41,11 @@ services:
     volumes:
       - ./frontend/:/app
       - /app/node_modules   
+  
+  flutter:
+   container_name: flutter
+   build: ./one-app/one-app
+   command: sh -c "flutter pub get && flutter run"
+   volumes:
+     - ./flutter:/app
+   ports:
