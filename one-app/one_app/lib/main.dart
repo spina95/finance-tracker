@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:one_app/common/tab_index_provider.dart';
 import 'package:one_app/common/theme.dart';
 import 'package:one_app/common/theme_provider.dart';
 import 'package:one_app/views/features/finance/views/finance_page.dart';
+import 'package:one_app/views/features/finance/views/settings_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
@@ -20,14 +22,12 @@ Future<void> main() async {
 class MainApp extends ConsumerWidget {
   const MainApp({super.key});
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    FinancePage(),
-    Text(
-      'Index 1: Business',
+  static final List<Widget> _widgetOptions = <Widget>[
+    const Text(
+      'Index 1: Home',
     ),
-    Text(
-      'Index 2: School',
-    ),
+    const FinancePage(),
+    const SettingsPage()
   ];
 
   @override
@@ -35,6 +35,11 @@ class MainApp extends ConsumerWidget {
     final themeMode = ref.watch(themeNotifierProvider);
     final themeNotifier = ref.read(themeNotifierProvider.notifier);
     final indexBottomNavbar = ref.watch(indexBottomNavbarProvider);
+
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.blue, // Status bar color
+    ));
+
     return MaterialApp(
       theme: lightTheme,
       darkTheme: darkTheme,
@@ -44,22 +49,23 @@ class MainApp extends ConsumerWidget {
           child: _widgetOptions.elementAt(indexBottomNavbar),
         ),
         bottomNavigationBar: BottomNavigationBar(
+          selectedFontSize: 12,
+          unselectedFontSize: 12,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.home_rounded),
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.money),
+              icon: Icon(Icons.ssid_chart_rounded),
               label: 'Finance',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
+              icon: Icon(Icons.settings_rounded),
               label: 'Settings',
             ),
           ],
           currentIndex: indexBottomNavbar,
-          selectedItemColor: Theme.of(context).colorScheme.primary,
           onTap: (value) => ref
               .read(indexBottomNavbarProvider.notifier)
               .update((state) => value),

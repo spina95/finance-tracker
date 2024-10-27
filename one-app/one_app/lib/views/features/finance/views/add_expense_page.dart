@@ -141,7 +141,9 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   TextFormField(
                     style: Theme.of(context).textTheme.bodyLarge,
                     decoration: const InputDecoration(
-                        labelText: 'Name', hintText: "New expense"),
+                      labelText: 'Name',
+                      hintText: "New expense",
+                    ),
                     validator: (value) {
                       if (value != null && value.isEmpty) {
                         return 'Please enter a name';

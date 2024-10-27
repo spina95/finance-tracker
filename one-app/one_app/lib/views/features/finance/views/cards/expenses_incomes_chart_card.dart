@@ -218,7 +218,7 @@ class _ExpenseIncomesChartCardState extends State<ExpenseIncomesChartCard> {
                 icon: const Icon(Icons.keyboard_arrow_left),
               ),
               Text(year.toString(),
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         fontWeight: FontWeight.w500,
                       )),
               IconButton(
