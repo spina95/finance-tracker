@@ -3,13 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:one_app/common/const.dart';
-import 'package:one_app/common/theme_provider.dart';
 import 'package:one_app/views/features/finance/models/expense_model.dart';
 import 'package:one_app/views/features/finance/models/total_payment_type_model.dart';
 import 'package:one_app/views/features/finance/providers/expense_client.dart';
-import 'package:one_app/views/features/finance/views/cards/categories_expenses_card.dart';
-import 'package:one_app/views/features/finance/views/cards/expenses_incomes_chart_card.dart';
-import 'package:one_app/views/features/finance/views/cards/month_expenses_card.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 
 class ExpensesPage extends ConsumerStatefulWidget {
@@ -46,7 +42,7 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
     setState(() {
       isLoading = true;
     });
-
+    carouselIndex = 0;
     totalPaymentTypes = await _expenseClient.getTotalExpensesByAccount(
         selectedMonth, selectedYear);
     totalPaymentTypes.insert(
