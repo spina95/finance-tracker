@@ -3,6 +3,7 @@ import 'package:one_app/views/features/finance/models/expense_model.dart';
 import 'package:one_app/views/features/finance/models/payment_type_model.dart';
 import 'package:one_app/views/features/finance/models/total_category_model.dart';
 import 'package:one_app/views/features/finance/models/total_month_model.dart';
+import 'package:one_app/views/features/finance/models/total_payment_type_model.dart';
 import 'package:one_app/views/features/finance/views/cards/categories_expenses_card.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -48,16 +49,14 @@ class ExpenseApiClient {
     }
   }
 
-  Future<List<Expense>> getLastExpensesPerMonth(
-      int count, int month, int year) async {
+  Future<List<Expense>> getLastExpensesPerMonth(int count, int month, int year,
+      {int? paymentTypeId}) async {
     try {
       final startDate = DateTime(year, month, 1);
       final endDate =
           DateTime(startDate.year, startDate.month + 1, startDate.day);
 
-      final response = await supabase
-          .from('expenses')
-          .select('''
+      var query = supabase.from('expenses').select('''
             id,
                 name,
                 amount,
@@ -75,11 +74,13 @@ class ExpenseApiClient {
                   color,
                   icon
                 )
-          ''')
-          .gte('date', startDate)
-          .lt('date', endDate)
-          .order('date', ascending: false)
-          .limit(count);
+          ''').gte('date', startDate).lt('date', endDate);
+
+      if (paymentTypeId != null) {
+        query = query.eq('paymentType_id', paymentTypeId);
+      }
+
+      var response = await query.order('date', ascending: false).limit(count);
 
       return List<Expense>.from(response.map((x) => Expense.fromJson(x)));
     } catch (e) {
@@ -169,6 +170,18 @@ class ExpenseApiClient {
         'category_id': expense.category!.id,
         'paymentType_id': expense.paymentType!.id,
       });
+    } catch (e) {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  Future<List<TotalPaymentType>> getTotalExpensesByAccount(
+      int month, int year) async {
+    try {
+      final response = await supabase.rpc('get_total_expenses_by_account',
+          params: {'month': month, 'year': year});
+      return List<TotalPaymentType>.from(
+          response.map((x) => TotalPaymentType.fromJson(x)));
     } catch (e) {
       throw Exception('Failed to load data');
     }
