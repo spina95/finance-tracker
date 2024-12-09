@@ -210,6 +210,18 @@ class ExpenseApiClient {
     }
   }
 
+  Future<List<TotalPaymentType>> getTotalIncomesByAccount(
+      int month, int year) async {
+    try {
+      final response = await supabase.rpc('get_total_incomes_by_account',
+          params: {'month': month, 'year': year});
+      return List<TotalPaymentType>.from(
+          response.map((x) => TotalPaymentType.fromJson(x)));
+    } catch (e) {
+      throw Exception('Failed to load data');
+    }
+  }
+
   Future<List<Income>> getLastIncomesPerMonth(int count, int month, int year,
       {int? paymentTypeId}) async {
     try {

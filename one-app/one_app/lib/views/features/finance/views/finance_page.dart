@@ -82,7 +82,7 @@ class _FinancePageState extends ConsumerState<FinancePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AddExpensePage(
+                    builder: (context) => const AddExpensePage(
                       isIncome: false,
                     ),
                   ),
@@ -95,7 +95,7 @@ class _FinancePageState extends ConsumerState<FinancePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AddExpensePage(
+                    builder: (context) => const AddExpensePage(
                       isIncome: true,
                     ),
                   ),
@@ -148,10 +148,10 @@ class _FinancePageState extends ConsumerState<FinancePage> {
           children: [
             MonthExpensesCard(),
             const CategoriesExpensesCard(),
-            const ExpenseIncomesChartCard(),
             MonthExpensesCard(
               isIncomes: true,
             ),
+            const ExpenseIncomesChartCard(),
           ],
         ),
       ),

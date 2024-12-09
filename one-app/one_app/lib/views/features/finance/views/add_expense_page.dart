@@ -10,9 +10,9 @@ import 'package:one_app/views/features/finance/models/payment_type_model.dart';
 import 'package:one_app/views/features/finance/providers/expense_client.dart';
 
 class AddExpensePage extends StatefulWidget {
-  bool isIncome = false;
+  final bool isIncome;
 
-  AddExpensePage({this.isIncome = false, super.key});
+  const AddExpensePage({this.isIncome = false, super.key});
 
   @override
   _AddExpensePageState createState() => _AddExpensePageState();

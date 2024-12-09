@@ -71,7 +71,12 @@ class _MonthExpensesCardState extends ConsumerState<MonthExpensesCard> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ExpensesPage(month, year)),
+            MaterialPageRoute(
+                builder: (context) => ExpensesPage(
+                      month,
+                      year,
+                      isIncomes: widget.isIncomes,
+                    )),
           );
         },
         content: Column(

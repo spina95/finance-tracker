@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:one_app/common/const.dart';
 import 'package:one_app/views/features/finance/models/expense_model.dart';
+import 'package:one_app/views/features/finance/models/income_model.dart';
 import 'package:one_app/views/features/finance/models/total_payment_type_model.dart';
 import 'package:one_app/views/features/finance/providers/expense_client.dart';
 import 'package:dots_indicator/dots_indicator.dart';
@@ -11,7 +12,9 @@ import 'package:dots_indicator/dots_indicator.dart';
 class ExpensesPage extends ConsumerStatefulWidget {
   final int month;
   final int year;
-  const ExpensesPage(this.month, this.year, {super.key});
+  final bool isIncomes;
+  const ExpensesPage(this.month, this.year,
+      {this.isIncomes = false, super.key});
 
   @override
   _FinancePageState createState() => _FinancePageState();
@@ -27,6 +30,7 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
   int carouselIndex = 0;
 
   List<Expense> expenses = [];
+  List<Income> incomes = [];
   List<TotalPaymentType> totalPaymentTypes = [];
 
   @override
@@ -43,8 +47,11 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
       isLoading = true;
     });
     carouselIndex = 0;
-    totalPaymentTypes = await _expenseClient.getTotalExpensesByAccount(
-        selectedMonth, selectedYear);
+    totalPaymentTypes = widget.isIncomes
+        ? await _expenseClient.getTotalIncomesByAccount(
+            selectedMonth, selectedYear)
+        : await _expenseClient.getTotalExpensesByAccount(
+            selectedMonth, selectedYear);
     totalPaymentTypes.insert(
         0,
         TotalPaymentType(
@@ -57,10 +64,16 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
     if (carouselIndex != 0) {
       paymentTypeId = totalPaymentTypes[carouselIndex].paymentTypeId;
     }
+    if (widget.isIncomes) {
+      incomes = await _expenseClient.getLastIncomesPerMonth(
+          100000, selectedMonth, selectedYear,
+          paymentTypeId: paymentTypeId);
+    } else {
+      expenses = await _expenseClient.getLastExpensesPerMonth(
+          100000, selectedMonth, selectedYear,
+          paymentTypeId: paymentTypeId);
+    }
 
-    expenses = await _expenseClient.getLastExpensesPerMonth(
-        100000, selectedMonth, selectedYear,
-        paymentTypeId: paymentTypeId);
     setState(() {
       isLoading = false;
     });
@@ -72,9 +85,16 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
       paymentTypeId = totalPaymentTypes[carouselIndex].paymentTypeId;
     }
 
-    expenses = await _expenseClient.getLastExpensesPerMonth(
-        100000, selectedMonth, selectedYear,
-        paymentTypeId: paymentTypeId);
+    if (widget.isIncomes) {
+      incomes = await _expenseClient.getLastIncomesPerMonth(
+          100000, selectedMonth, selectedYear,
+          paymentTypeId: paymentTypeId);
+    } else {
+      expenses = await _expenseClient.getLastExpensesPerMonth(
+          100000, selectedMonth, selectedYear,
+          paymentTypeId: paymentTypeId);
+    }
+
     setState(() {});
   }
 
@@ -174,8 +194,9 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
               const SizedBox(
                 height: 16,
               ),
-              if (expenses.isNotEmpty)
-                Expanded(
+              if ((widget.isIncomes && incomes.isNotEmpty) ||
+                  expenses.isNotEmpty)
+                Flexible(
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -185,7 +206,9 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
                       ),
                     ),
                     child: ListView.separated(
-                      itemCount: expenses.length,
+                      shrinkWrap: true,
+                      itemCount:
+                          widget.isIncomes ? incomes.length : expenses.length,
                       separatorBuilder: (context, index) => const Divider(),
                       itemBuilder: (context, index) => Padding(
                         padding: const EdgeInsets.symmetric(
@@ -196,13 +219,15 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
                             Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: hexToColor(
-                                    expenses[index].category!.color!),
+                                color: hexToColor(widget.isIncomes
+                                    ? incomes[index].category!.color!
+                                    : expenses[index].category!.color!),
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
-                                getMaterialIcon(
-                                    expenses[index].category!.flutterIcon),
+                                getMaterialIcon(widget.isIncomes
+                                    ? incomes[index].category!.flutterIcon
+                                    : expenses[index].category!.flutterIcon),
                               ),
                             ),
                             const SizedBox(
@@ -212,14 +237,18 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  expenses[index].name!,
+                                  widget.isIncomes
+                                      ? incomes[index].name!
+                                      : expenses[index].name!,
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium!
                                       .copyWith(fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  Jiffy.parseFromDateTime(expenses[index].date!)
+                                  Jiffy.parseFromDateTime(widget.isIncomes
+                                          ? incomes[index].date!
+                                          : expenses[index].date!)
                                       .format(pattern: "EEEE, do"),
                                   style: Theme.of(context)
                                       .textTheme
@@ -234,23 +263,31 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    doubleToCurrency(expenses[index].amount!),
+                                    doubleToCurrency(widget.isIncomes
+                                        ? incomes[index].amount!
+                                        : expenses[index].amount!),
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium!
                                         .copyWith(fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    expenses[index].paymentType!.name!,
+                                    widget.isIncomes
+                                        ? incomes[index].paymentType!.name!
+                                        : expenses[index].paymentType!.name!,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium!
                                         .copyWith(
-                                            color: hexToColor(expenses[index]
-                                                .paymentType!
-                                                .color!)),
+                                            color: hexToColor(widget.isIncomes
+                                                ? incomes[index]
+                                                    .paymentType!
+                                                    .color!
+                                                : expenses[index]
+                                                    .paymentType!
+                                                    .color!)),
                                   ),
                                 ],
                               ),
