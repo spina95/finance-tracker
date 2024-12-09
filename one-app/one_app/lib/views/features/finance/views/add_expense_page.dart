@@ -5,11 +5,14 @@ import 'package:jiffy/jiffy.dart';
 import 'package:one_app/common/const.dart';
 import 'package:one_app/views/features/finance/models/category_model.dart';
 import 'package:one_app/views/features/finance/models/expense_model.dart';
+import 'package:one_app/views/features/finance/models/income_model.dart';
 import 'package:one_app/views/features/finance/models/payment_type_model.dart';
 import 'package:one_app/views/features/finance/providers/expense_client.dart';
 
 class AddExpensePage extends StatefulWidget {
-  const AddExpensePage({super.key});
+  bool isIncome = false;
+
+  AddExpensePage({this.isIncome = false, super.key});
 
   @override
   _AddExpensePageState createState() => _AddExpensePageState();
@@ -44,7 +47,9 @@ class _AddExpensePageState extends State<AddExpensePage> {
     setState(() {
       isLoading = true;
     });
-    categories = await expenseClient.getCategories();
+    categories = widget.isIncome
+        ? await expenseClient.getIncomeCategories()
+        : await expenseClient.getExpenseCategories();
     paymentTypes = await expenseClient.getPaymentTypes();
     _paymentType = paymentTypes[0];
     _category = categories[0];
@@ -57,25 +62,38 @@ class _AddExpensePageState extends State<AddExpensePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New expense'),
+        title: Text(widget.isIncome ? 'New income' : 'New expense'),
         actions: [
           TextButton(
             onPressed: () async {
               if (_formKey.currentState != null &&
                   _formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
+                if (widget.isIncome) {
+                  final income = Income(
+                    name: _name,
+                    amount: _amount,
+                    date: _date,
+                    category: _category,
+                    paymentType: _paymentType,
+                  );
+                  await expenseClient.addIncome(income);
+                } else {
+                  final expense = Expense(
+                    name: _name,
+                    amount: _amount,
+                    date: _date,
+                    category: _category,
+                    paymentType: _paymentType,
+                  );
+                  await expenseClient.addExpense(expense);
+                }
 
-                final expense = Expense(
-                  name: _name,
-                  amount: _amount,
-                  date: _date,
-                  category: _category,
-                  paymentType: _paymentType,
-                );
-                await expenseClient.addExpense(expense);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: const Text('Expense created successfully'),
+                    content: Text(widget.isIncome
+                        ? 'Income created successfully'
+                        : 'Expense created successfully'),
                     action: SnackBarAction(
                       label: 'Dismiss',
                       onPressed: () {},
@@ -140,9 +158,9 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   ),
                   TextFormField(
                     style: Theme.of(context).textTheme.bodyLarge,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Name',
-                      hintText: "New expense",
+                      hintText: widget.isIncome ? "New income" : "New expense",
                     ),
                     validator: (value) {
                       if (value != null && value.isEmpty) {

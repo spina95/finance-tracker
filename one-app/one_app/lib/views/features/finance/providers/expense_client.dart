@@ -1,18 +1,27 @@
 import 'package:one_app/views/features/finance/models/category_model.dart';
 import 'package:one_app/views/features/finance/models/expense_model.dart';
+import 'package:one_app/views/features/finance/models/income_model.dart';
 import 'package:one_app/views/features/finance/models/payment_type_model.dart';
 import 'package:one_app/views/features/finance/models/total_category_model.dart';
 import 'package:one_app/views/features/finance/models/total_month_model.dart';
 import 'package:one_app/views/features/finance/models/total_payment_type_model.dart';
-import 'package:one_app/views/features/finance/views/cards/categories_expenses_card.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ExpenseApiClient {
   final supabase = Supabase.instance.client;
 
-  Future<List<Category>> getCategories() async {
+  Future<List<Category>> getExpenseCategories() async {
     try {
       final response = await supabase.from('expense_categories').select();
+      return List<Category>.from(response.map((x) => Category.fromJson(x)));
+    } catch (e) {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  Future<List<Category>> getIncomeCategories() async {
+    try {
+      final response = await supabase.from('income_categories').select();
       return List<Category>.from(response.map((x) => Category.fromJson(x)));
     } catch (e) {
       throw Exception('Failed to load data');
@@ -175,6 +184,20 @@ class ExpenseApiClient {
     }
   }
 
+  Future<void> addIncome(Income income) async {
+    try {
+      await supabase.from('incomes').insert({
+        'name': income.name,
+        'date': income.date!.toIso8601String(),
+        'amount': income.amount,
+        'category_id': income.category!.id,
+        'paymentType_id': income.paymentType!.id,
+      });
+    } catch (e) {
+      throw Exception('Failed to load data');
+    }
+  }
+
   Future<List<TotalPaymentType>> getTotalExpensesByAccount(
       int month, int year) async {
     try {
@@ -182,6 +205,60 @@ class ExpenseApiClient {
           params: {'month': month, 'year': year});
       return List<TotalPaymentType>.from(
           response.map((x) => TotalPaymentType.fromJson(x)));
+    } catch (e) {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  Future<List<Income>> getLastIncomesPerMonth(int count, int month, int year,
+      {int? paymentTypeId}) async {
+    try {
+      final startDate = DateTime(year, month, 1);
+      final endDate =
+          DateTime(startDate.year, startDate.month + 1, startDate.day);
+
+      var query = supabase.from('incomes').select('''
+            id,
+                name,
+                amount,
+                date,
+                category_id (
+                  id,
+                  name,
+                  color,
+                  icon,
+                  icon_flutter
+                ),
+                paymentType_id (
+                  id,
+                  name,
+                  color,
+                  icon
+                )
+          ''').gte('date', startDate).lt('date', endDate);
+
+      if (paymentTypeId != null) {
+        query = query.eq('paymentType_id', paymentTypeId);
+      }
+
+      var response = await query.order('date', ascending: false).limit(count);
+
+      return List<Income>.from(response.map((x) => Income.fromJson(x)));
+    } catch (e) {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  Future<double> getTotalIncomesPerMonth(int month, int year) async {
+    try {
+      final startDate = DateTime(year, month, 1);
+      final endDate =
+          DateTime(startDate.year, startDate.month + 1, startDate.day);
+
+      final response = await supabase.from('incomes').select('''
+                amount.sum()
+          ''').gte('date', startDate).lt('date', endDate);
+      return response[0]['sum'] ?? 0.0;
     } catch (e) {
       throw Exception('Failed to load data');
     }

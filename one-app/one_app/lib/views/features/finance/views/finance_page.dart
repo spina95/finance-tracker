@@ -75,31 +75,83 @@ class _FinancePageState extends ConsumerState<FinancePage> {
           ],
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AddExpensePage(),
-                ),
-              ).then(
-                (_) {
-                  setState(() {});
-                },
-              );
+          PopupMenuButton(
+            position: PopupMenuPosition.under,
+            onSelected: (value) {
+              if (value == "expense") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddExpensePage(
+                      isIncome: false,
+                    ),
+                  ),
+                ).then(
+                  (_) {
+                    setState(() {});
+                  },
+                );
+              } else if (value == "income") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddExpensePage(
+                      isIncome: true,
+                    ),
+                  ),
+                ).then(
+                  (_) {
+                    setState(() {});
+                  },
+                );
+              }
             },
-            icon: const Icon(Icons.add_rounded),
-          ),
+            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+              const PopupMenuItem(
+                value: "expense",
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(right: 8.0),
+                      child: Icon(Icons.add_shopping_cart_rounded),
+                    ),
+                    Text(
+                      'Expense',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: "income",
+                child: Row(
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.only(right: 8.0),
+                        child: Icon(Icons.savings_rounded)),
+                    Text(
+                      'Income',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            child: const Icon(Icons.add_rounded),
+          )
         ],
         leading: IconButton(
             onPressed: () {}, icon: const Icon(Icons.bar_chart_rounded)),
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             MonthExpensesCard(),
-            CategoriesExpensesCard(),
-            ExpenseIncomesChartCard(),
+            const CategoriesExpensesCard(),
+            const ExpenseIncomesChartCard(),
+            MonthExpensesCard(
+              isIncomes: true,
+            ),
           ],
         ),
       ),
