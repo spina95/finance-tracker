@@ -107,8 +107,7 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
     setState(() {});
   }
 
-  PopupMenuEntry<dynamic> sortMenuItem(
-      String value, String title, Widget icon) {
+  PopupMenuEntry<dynamic> sortMenuItem(String value, String title) {
     return PopupMenuItem(
       value: value,
       child: Row(
@@ -118,7 +117,6 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
             title,
             style: const TextStyle(fontSize: 15),
           ),
-          icon,
         ],
       ),
     );
@@ -229,6 +227,11 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
                     children: [
                       PopupMenuButton(
                         position: PopupMenuPosition.under,
+                        shadowColor: Colors.black38,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                          Radius.circular(16.0),
+                        )),
                         onSelected: (value) {
                           if (value == "expense_up") {
                             setState(() {
@@ -254,39 +257,76 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
                           _loadData();
                         },
                         itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                          sortMenuItem(
-                            "expense_up",
-                            "Expense",
-                            Transform.flip(
-                              flipY: true,
-                              child: const Icon(
-                                Icons.sort_rounded,
+                          PopupMenuItem(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8)),
+                              clipBehavior: Clip.antiAlias,
+                              child: StatefulBuilder(
+                                builder: (BuildContext context,
+                                    StateSetter setState) {
+                                  return Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          color: sortAscending
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                                  .withOpacity(0.2)
+                                              : Colors.transparent,
+                                          child: TextButton(
+                                            child: Transform.flip(
+                                              flipY: true,
+                                              child: const Icon(
+                                                Icons.sort_rounded,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                sortAscending = true;
+                                              });
+                                              Navigator.of(context).pop();
+                                              _loadData();
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                            color: !sortAscending
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .primary
+                                                    .withOpacity(0.2)
+                                                : Colors.transparent,
+                                            child: TextButton(
+                                              child: const Icon(
+                                                Icons.sort_rounded,
+                                              ),
+                                              onPressed: () {
+                                                setState(() {
+                                                  sortAscending = false;
+                                                });
+                                                Navigator.of(context).pop();
+                                                _loadData();
+                                              },
+                                            )),
+                                      )
+                                    ],
+                                  );
+                                },
                               ),
                             ),
                           ),
                           sortMenuItem(
-                            "expense_down",
-                            "Expense",
-                            const Icon(
-                              Icons.sort_rounded,
-                            ),
+                            "expense_up",
+                            "Amount",
                           ),
                           sortMenuItem(
                             "date_up",
                             "Date",
-                            Transform.flip(
-                              flipY: true,
-                              child: const Icon(
-                                Icons.sort_rounded,
-                              ),
-                            ),
-                          ),
-                          sortMenuItem(
-                            "date_down",
-                            "Date",
-                            const Icon(
-                              Icons.sort_rounded,
-                            ),
                           ),
                         ],
                         child: Row(

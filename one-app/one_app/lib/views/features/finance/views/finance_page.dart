@@ -76,6 +76,11 @@ class _FinancePageState extends ConsumerState<FinancePage> {
         actions: [
           PopupMenuButton(
             position: PopupMenuPosition.under,
+            shadowColor: Colors.black38,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+              Radius.circular(16.0),
+            )),
             onSelected: (value) {
               if (value == "expense") {
                 Navigator.push(
