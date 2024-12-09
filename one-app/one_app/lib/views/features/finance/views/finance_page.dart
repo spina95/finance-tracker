@@ -29,7 +29,6 @@ class _FinancePageState extends ConsumerState<FinancePage> {
 
   @override
   Widget build(BuildContext context) {
-    final themeNotifier = ref.read(themeNotifierProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -138,6 +137,9 @@ class _FinancePageState extends ConsumerState<FinancePage> {
               ),
             ],
             child: const Icon(Icons.add_rounded),
+          ),
+          const SizedBox(
+            width: 8,
           )
         ],
         leading: IconButton(

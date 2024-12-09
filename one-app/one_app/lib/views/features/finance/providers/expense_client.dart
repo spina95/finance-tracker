@@ -59,7 +59,9 @@ class ExpenseApiClient {
   }
 
   Future<List<Expense>> getLastExpensesPerMonth(int count, int month, int year,
-      {int? paymentTypeId}) async {
+      {int? paymentTypeId,
+      String sort = 'date',
+      bool sortAscending = false}) async {
     try {
       final startDate = DateTime(year, month, 1);
       final endDate =
@@ -89,7 +91,8 @@ class ExpenseApiClient {
         query = query.eq('paymentType_id', paymentTypeId);
       }
 
-      var response = await query.order('date', ascending: false).limit(count);
+      var response =
+          await query.order(sort, ascending: sortAscending).limit(count);
 
       return List<Expense>.from(response.map((x) => Expense.fromJson(x)));
     } catch (e) {
@@ -184,6 +187,14 @@ class ExpenseApiClient {
     }
   }
 
+  Future<void> deleteExpense(Expense expense) async {
+    try {
+      await supabase.from('expenses').delete().eq('id', expense.id!);
+    } catch (e) {
+      throw Exception('Failed to load data');
+    }
+  }
+
   Future<void> addIncome(Income income) async {
     try {
       await supabase.from('incomes').insert({
@@ -193,6 +204,14 @@ class ExpenseApiClient {
         'category_id': income.category!.id,
         'paymentType_id': income.paymentType!.id,
       });
+    } catch (e) {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  Future<void> deleteIncome(Income income) async {
+    try {
+      await supabase.from('incomes').delete().eq('id', income.id!);
     } catch (e) {
       throw Exception('Failed to load data');
     }
@@ -223,7 +242,9 @@ class ExpenseApiClient {
   }
 
   Future<List<Income>> getLastIncomesPerMonth(int count, int month, int year,
-      {int? paymentTypeId}) async {
+      {int? paymentTypeId,
+      String sort = 'date',
+      bool sortAscending = false}) async {
     try {
       final startDate = DateTime(year, month, 1);
       final endDate =
@@ -253,7 +274,8 @@ class ExpenseApiClient {
         query = query.eq('paymentType_id', paymentTypeId);
       }
 
-      var response = await query.order('date', ascending: false).limit(count);
+      var response =
+          await query.order(sort, ascending: sortAscending).limit(count);
 
       return List<Income>.from(response.map((x) => Income.fromJson(x)));
     } catch (e) {
