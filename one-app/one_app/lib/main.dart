@@ -5,6 +5,7 @@ import 'package:one_app/common/tab_index_provider.dart';
 import 'package:one_app/common/theme.dart';
 import 'package:one_app/common/theme_provider.dart';
 import 'package:one_app/views/features/finance/views/finance_page.dart';
+import 'package:one_app/views/features/finance/views/habits_calendar_page.dart';
 import 'package:one_app/views/features/finance/views/settings_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -23,9 +24,7 @@ class MainApp extends ConsumerWidget {
   const MainApp({super.key});
 
   static final List<Widget> _widgetOptions = <Widget>[
-    const Text(
-      'Index 1: Home',
-    ),
+    const HabitsPage(),
     const FinancePage(),
     const SettingsPage()
   ];
