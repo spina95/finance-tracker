@@ -18,7 +18,8 @@ class AddExpensePage extends StatefulWidget {
   _AddExpensePageState createState() => _AddExpensePageState();
 }
 
-class _AddExpensePageState extends State<AddExpensePage> {
+class _AddExpensePageState extends State<AddExpensePage>
+    with SingleTickerProviderStateMixin {
   final expenseClient = ExpenseApiClient();
   bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
@@ -31,13 +32,26 @@ class _AddExpensePageState extends State<AddExpensePage> {
   List<PaymentType> paymentTypes = [];
   final TextEditingController _textEditingController = TextEditingController();
   TextEditingController dateController = TextEditingController();
+  late TabController _tabController;
 
   final double _itemSpace = 16;
+
+  bool isIncome = false;
 
   @override
   void initState() {
     super.initState();
+    isIncome = widget.isIncome;
     _textEditingController.text = "€ 0,00";
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      setState(() {
+        if (_tabController.indexIsChanging) {
+          isIncome = _tabController.index == 1;
+          _loadData();
+        }
+      });
+    });
     dateController.text =
         Jiffy.parseFromDateTime(_date!).format(pattern: "EEEE, do MMMM yyyy");
     _loadData();
@@ -47,7 +61,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
     setState(() {
       isLoading = true;
     });
-    categories = widget.isIncome
+    categories = isIncome
         ? await expenseClient.getIncomeCategories()
         : await expenseClient.getExpenseCategories();
     paymentTypes = await expenseClient.getPaymentTypes();
@@ -62,14 +76,21 @@ class _AddExpensePageState extends State<AddExpensePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isIncome ? 'New income' : 'New expense'),
+        title: const Text('Add'),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(text: 'Expense'),
+            Tab(text: 'Income'),
+          ],
+        ),
         actions: [
           TextButton(
             onPressed: () async {
               if (_formKey.currentState != null &&
                   _formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                if (widget.isIncome) {
+                if (isIncome) {
                   final income = Income(
                     name: _name,
                     amount: _amount,
@@ -91,7 +112,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(widget.isIncome
+                    content: Text(isIncome
                         ? 'Income created successfully'
                         : 'Expense created successfully'),
                     action: SnackBarAction(
@@ -160,7 +181,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     style: Theme.of(context).textTheme.bodyLarge,
                     decoration: InputDecoration(
                       labelText: 'Name',
-                      hintText: widget.isIncome ? "New income" : "New expense",
+                      hintText: isIncome ? "New income" : "New expense",
                     ),
                     validator: (value) {
                       if (value != null && value.isEmpty) {
@@ -218,8 +239,10 @@ class _AddExpensePageState extends State<AddExpensePage> {
                                   color: hexToColor(category.color!),
                                   shape: BoxShape.circle,
                                 ),
-                                child: Icon(
-                                  getMaterialIcon(category.flutterIcon),
+                                child: Text(
+                                  category.icon!,
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
                                 ),
                               ),
                               const SizedBox(
@@ -264,8 +287,10 @@ class _AddExpensePageState extends State<AddExpensePage> {
                                   color: hexToColor(category.color!),
                                   shape: BoxShape.circle,
                                 ),
-                                child: Icon(
-                                  getMaterialIcon(category.flutterIcon),
+                                child: Text(
+                                  category.icon!,
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
                                 ),
                               ),
                               const SizedBox(

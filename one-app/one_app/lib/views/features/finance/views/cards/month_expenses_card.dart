@@ -126,10 +126,12 @@ class _MonthExpensesCardState extends ConsumerState<MonthExpensesCard> {
                                     : expenses[index].category!.color!),
                                 shape: BoxShape.circle,
                               ),
-                              child: Icon(
-                                getMaterialIcon(widget.isIncomes
-                                    ? incomes[index].category!.flutterIcon
-                                    : expenses[index].category!.flutterIcon),
+                              child: Text(
+                                widget.isIncomes
+                                    ? incomes[index].category!.icon!
+                                    : expenses[index].category!.icon!,
+                                style:
+                                    Theme.of(context).textTheme.headlineSmall,
                               ),
                             ),
                             const SizedBox(

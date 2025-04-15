@@ -4,10 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:one_app/common/tab_index_provider.dart';
 import 'package:one_app/common/theme.dart';
 import 'package:one_app/common/theme_provider.dart';
+import 'package:one_app/views/features/contents/contents_page.dart';
 import 'package:one_app/views/features/finance/views/finance_page.dart';
-import 'package:one_app/views/features/finance/views/habits_calendar_page.dart';
+import 'package:one_app/views/features/habits/habits_calendar_page.dart';
 import 'package:one_app/views/features/finance/views/settings_page.dart';
+import 'package:sidebarx/sidebarx.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +29,8 @@ class MainApp extends ConsumerWidget {
   static final List<Widget> _widgetOptions = <Widget>[
     const HabitsPage(),
     const FinancePage(),
-    const SettingsPage()
+    const SeenContentsPage(),
+    const SettingsPage(),
   ];
 
   @override
@@ -36,39 +40,86 @@ class MainApp extends ConsumerWidget {
     final indexBottomNavbar = ref.watch(indexBottomNavbarProvider);
 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.blue, // Status bar color
+      statusBarColor: Colors.black, // Status bar color
     ));
 
     return MaterialApp(
       theme: lightTheme,
       darkTheme: darkTheme,
-      themeMode: themeMode,
+      themeMode: ThemeMode.system,
       home: Scaffold(
         body: Center(
-          child: _widgetOptions.elementAt(indexBottomNavbar),
+          child: !UniversalPlatform.isIOS
+              ? Row(
+                  children: [
+                    SidebarX(
+                      controller: SidebarXController(selectedIndex: 0),
+                      theme: const SidebarXTheme(
+                        padding: EdgeInsets.symmetric(vertical: 50),
+                      ),
+                      extendedTheme: const SidebarXTheme(
+                        width: 200,
+                        padding: EdgeInsets.symmetric(vertical: 50),
+                      ),
+                      items: [
+                        SidebarXItem(
+                            icon: Icons.check_circle_outline_rounded,
+                            label: 'Habits',
+                            onTap: () {
+                              ref
+                                  .read(indexBottomNavbarProvider.notifier)
+                                  .state = 0;
+                            }),
+                        SidebarXItem(
+                            icon: Icons.bar_chart_rounded,
+                            label: 'Finance',
+                            onTap: () {
+                              ref
+                                  .read(indexBottomNavbarProvider.notifier)
+                                  .state = 1;
+                            }),
+                        SidebarXItem(
+                            icon: Icons.bookmarks_rounded,
+                            label: 'Contents',
+                            onTap: () {
+                              ref
+                                  .read(indexBottomNavbarProvider.notifier)
+                                  .state = 2;
+                            }),
+                      ],
+                    ),
+                    Expanded(
+                      child: _widgetOptions.elementAt(indexBottomNavbar),
+                    ),
+                  ],
+                )
+              : _widgetOptions.elementAt(indexBottomNavbar),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          selectedFontSize: 12,
-          unselectedFontSize: 12,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_rounded),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.ssid_chart_rounded),
-              label: 'Finance',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings_rounded),
-              label: 'Settings',
-            ),
-          ],
-          currentIndex: indexBottomNavbar,
-          onTap: (value) => ref
-              .read(indexBottomNavbarProvider.notifier)
-              .update((state) => value),
-        ),
+        bottomNavigationBar: !UniversalPlatform.isIOS
+            ? null
+            : BottomNavigationBar(
+                elevation: 0,
+                selectedFontSize: 12,
+                unselectedFontSize: 12,
+                currentIndex: indexBottomNavbar,
+                onTap: (index) {
+                  ref.read(indexBottomNavbarProvider.notifier).state = index;
+                },
+                items: const <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.check_circle_outline_rounded),
+                    label: 'Habits',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.bar_chart_rounded),
+                    label: 'Finance',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.bookmarks_rounded),
+                    label: 'Contents',
+                  ),
+                ],
+              ),
       ),
     );
   }

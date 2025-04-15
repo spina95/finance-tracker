@@ -145,7 +145,7 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
             ),
             Text(
               "${monthNumberToString(selectedMonth, short: false)} $selectedYear",
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
             ),
@@ -167,198 +167,202 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
       ),
       body: Builder(builder: (context) {
         if (isLoading) return const Center(child: CircularProgressIndicator());
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              SizedBox(
-                  height: 70,
-                  child: CarouselSlider(
-                    carouselController: carouselController,
-                    options: CarouselOptions(
-                      height: 400.0,
-                      onPageChanged: (index, reason) {
-                        carouselIndex = index;
-                        _changePaymentType();
-                      },
-                    ),
-                    items: totalPaymentTypes.map((i) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                            child: Column(
-                              children: [
-                                Text(
-                                  i.paymentTypeName,
-                                  style: Theme.of(context).textTheme.bodyLarge,
-                                ),
-                                Text(
-                                  doubleToCurrency(i.totalAmount!),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineLarge!
-                                      .copyWith(fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          );
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                SizedBox(
+                    height: 70,
+                    child: CarouselSlider(
+                      carouselController: carouselController,
+                      options: CarouselOptions(
+                        height: 400.0,
+                        onPageChanged: (index, reason) {
+                          carouselIndex = index;
+                          _changePaymentType();
                         },
-                      );
-                    }).toList(),
-                  )),
-              SizedBox(
-                width: 100,
-                height: 20,
-                child: DotsIndicator(
-                  dotsCount: totalPaymentTypes.length,
-                  position: carouselIndex,
+                      ),
+                      items: totalPaymentTypes.map((i) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 5.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    i.paymentTypeName,
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                  Text(
+                                    doubleToCurrency(i.totalAmount!),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineLarge!
+                                        .copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      }).toList(),
+                    )),
+                SizedBox(
+                  width: 100,
+                  height: 20,
+                  child: DotsIndicator(
+                    dotsCount: totalPaymentTypes.length,
+                    position: carouselIndex,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              if ((widget.isIncomes && incomes.isNotEmpty) ||
-                  expenses.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      PopupMenuButton(
-                        position: PopupMenuPosition.under,
-                        shadowColor: Colors.black38,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                          Radius.circular(16.0),
-                        )),
-                        onSelected: (value) {
-                          if (value == "expense_up") {
-                            setState(() {
-                              sort = "amount";
-                              sortAscending = true;
-                            });
-                          } else if (value == "expense_down") {
-                            setState(() {
-                              sort = "amount";
-                              sortAscending = false;
-                            });
-                          } else if (value == "date_up") {
-                            setState(() {
-                              sort = "date";
-                              sortAscending = true;
-                            });
-                          } else if (value == "date_down") {
-                            setState(() {
-                              sort = "date";
-                              sortAscending = false;
-                            });
-                          }
-                          _loadData();
-                        },
-                        itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                          PopupMenuItem(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8)),
-                              clipBehavior: Clip.antiAlias,
-                              child: StatefulBuilder(
-                                builder: (BuildContext context,
-                                    StateSetter setState) {
-                                  return Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                          color: sortAscending
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .primary
-                                                  .withOpacity(0.2)
-                                              : Colors.transparent,
-                                          child: TextButton(
-                                            child: Transform.flip(
-                                              flipY: true,
-                                              child: const Icon(
-                                                Icons.sort_rounded,
-                                              ),
-                                            ),
-                                            onPressed: () {
-                                              setState(() {
-                                                sortAscending = true;
-                                              });
-                                              Navigator.of(context).pop();
-                                              _loadData();
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Container(
-                                            color: !sortAscending
+                const SizedBox(
+                  height: 16,
+                ),
+                if ((widget.isIncomes && incomes.isNotEmpty) ||
+                    expenses.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        PopupMenuButton(
+                          position: PopupMenuPosition.under,
+                          shadowColor: Colors.black38,
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                            Radius.circular(16.0),
+                          )),
+                          onSelected: (value) {
+                            if (value == "expense_up") {
+                              setState(() {
+                                sort = "amount";
+                                sortAscending = true;
+                              });
+                            } else if (value == "expense_down") {
+                              setState(() {
+                                sort = "amount";
+                                sortAscending = false;
+                              });
+                            } else if (value == "date_up") {
+                              setState(() {
+                                sort = "date";
+                                sortAscending = true;
+                              });
+                            } else if (value == "date_down") {
+                              setState(() {
+                                sort = "date";
+                                sortAscending = false;
+                              });
+                            }
+                            _loadData();
+                          },
+                          itemBuilder: (BuildContext context) =>
+                              <PopupMenuEntry>[
+                            PopupMenuItem(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8)),
+                                clipBehavior: Clip.antiAlias,
+                                child: StatefulBuilder(
+                                  builder: (BuildContext context,
+                                      StateSetter setState) {
+                                    return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            color: sortAscending
                                                 ? Theme.of(context)
                                                     .colorScheme
                                                     .primary
                                                     .withOpacity(0.2)
                                                 : Colors.transparent,
                                             child: TextButton(
-                                              child: const Icon(
-                                                Icons.sort_rounded,
+                                              child: Transform.flip(
+                                                flipY: true,
+                                                child: const Icon(
+                                                  Icons.sort_rounded,
+                                                ),
                                               ),
                                               onPressed: () {
                                                 setState(() {
-                                                  sortAscending = false;
+                                                  sortAscending = true;
                                                 });
                                                 Navigator.of(context).pop();
                                                 _loadData();
                                               },
-                                            )),
-                                      )
-                                    ],
-                                  );
-                                },
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Container(
+                                              color: !sortAscending
+                                                  ? Theme.of(context)
+                                                      .colorScheme
+                                                      .primary
+                                                      .withOpacity(0.2)
+                                                  : Colors.transparent,
+                                              child: TextButton(
+                                                child: const Icon(
+                                                  Icons.sort_rounded,
+                                                ),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    sortAscending = false;
+                                                  });
+                                                  Navigator.of(context).pop();
+                                                  _loadData();
+                                                },
+                                              )),
+                                        )
+                                      ],
+                                    );
+                                  },
+                                ),
                               ),
                             ),
-                          ),
-                          sortMenuItem(
-                            "expense_up",
-                            "Amount",
-                          ),
-                          sortMenuItem(
-                            "date_up",
-                            "Date",
-                          ),
-                        ],
-                        child: Row(
-                          children: [
-                            Text(capitalize(sort),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary)),
-                            const SizedBox(
-                              width: 4,
+                            sortMenuItem(
+                              "expense_up",
+                              "Amount",
                             ),
-                            Transform.flip(
-                              flipY: sortAscending,
-                              child: Icon(
-                                Icons.sort_rounded,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
+                            sortMenuItem(
+                              "date_up",
+                              "Date",
                             ),
                           ],
+                          child: Row(
+                            children: [
+                              Text(capitalize(sort),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium!
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary)),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Transform.flip(
+                                flipY: sortAscending,
+                                child: Icon(
+                                  Icons.sort_rounded,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              if ((widget.isIncomes && incomes.isNotEmpty) ||
-                  expenses.isNotEmpty)
-                Flexible(
-                  child: Container(
+                if ((widget.isIncomes && incomes.isNotEmpty) ||
+                    expenses.isNotEmpty)
+                  Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
                       borderRadius: const BorderRadius.all(
@@ -368,6 +372,7 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
                     child: ListView.separated(
                       padding: const EdgeInsets.all(16),
                       shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount:
                           widget.isIncomes ? incomes.length : expenses.length,
                       separatorBuilder: (context, index) => const Divider(),
@@ -422,10 +427,12 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
                                       : expenses[index].category!.color!),
                                   shape: BoxShape.circle,
                                 ),
-                                child: Icon(
-                                  getMaterialIcon(widget.isIncomes
-                                      ? incomes[index].category!.flutterIcon
-                                      : expenses[index].category!.flutterIcon),
+                                child: Text(
+                                  widget.isIncomes
+                                      ? incomes[index].category!.icon!
+                                      : expenses[index].category!.icon!,
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
                                 ),
                               ),
                               const SizedBox(
@@ -448,10 +455,8 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
                                             ? incomes[index].date!
                                             : expenses[index].date!)
                                         .format(pattern: "EEEE, do"),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(fontWeight: FontWeight.w300),
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
                                   ),
                                 ],
                               ),
@@ -496,17 +501,17 @@ class _FinancePageState extends ConsumerState<ExpensesPage>
                         ),
                       ),
                     ),
-                  ),
-                )
-              else
-                SizedBox(
-                  height: 100,
-                  child: Center(
-                    child: Text("No data available",
-                        style: Theme.of(context).textTheme.bodyLarge!),
-                  ),
-                )
-            ],
+                  )
+                else
+                  SizedBox(
+                    height: 100,
+                    child: Center(
+                      child: Text("No data available",
+                          style: Theme.of(context).textTheme.bodyLarge!),
+                    ),
+                  )
+              ],
+            ),
           ),
         );
       }),

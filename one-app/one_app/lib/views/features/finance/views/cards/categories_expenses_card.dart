@@ -94,64 +94,42 @@ class _CategoriesExpensesCardState
               ),
             ),
           if (categories.isNotEmpty)
-            Column(
-              children: [
-                const Divider(),
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: categories.length,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) => Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: hexToColor(categories[index].categoryColor!),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            getMaterialIcon(
-                                categories[index].categoryIconFlutter),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 16,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              categories[index].categoryName,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              doubleToCurrency(categories[index].totalAmount!),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ],
+            Column(children: [
+              const Divider(),
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: categories.length,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) => ListTile(
+                  contentPadding: const EdgeInsets.all(0),
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: hexToColor(categories[index].categoryColor!),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      categories[index].categoryIcon!,
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
                   ),
+                  title: Text(
+                    categories[index].categoryName,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  trailing: Text(
+                    doubleToCurrency(categories[index].totalAmount!),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ],
-            )
+              )
+            ])
           else
             SizedBox(
               height: 80,

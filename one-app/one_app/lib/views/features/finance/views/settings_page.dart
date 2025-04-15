@@ -35,6 +35,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           ),
         ),
       ),
+      body: const Text("version 0.0.1"),
     );
   }
 }

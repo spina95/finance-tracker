@@ -73,85 +73,11 @@ class _FinancePageState extends ConsumerState<FinancePage> {
             ),
           ],
         ),
-        actions: [
-          PopupMenuButton(
-            position: PopupMenuPosition.under,
-            shadowColor: Colors.black38,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-              Radius.circular(16.0),
-            )),
-            onSelected: (value) {
-              if (value == "expense") {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AddExpensePage(
-                      isIncome: false,
-                    ),
-                  ),
-                ).then(
-                  (_) {
-                    setState(() {});
-                  },
-                );
-              } else if (value == "income") {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AddExpensePage(
-                      isIncome: true,
-                    ),
-                  ),
-                ).then(
-                  (_) {
-                    setState(() {});
-                  },
-                );
-              }
-            },
-            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-              const PopupMenuItem(
-                value: "expense",
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: 8.0),
-                      child: Icon(Icons.add_shopping_cart_rounded),
-                    ),
-                    Text(
-                      'Expense',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ],
-                ),
-              ),
-              const PopupMenuItem(
-                value: "income",
-                child: Row(
-                  children: [
-                    Padding(
-                        padding: EdgeInsets.only(right: 8.0),
-                        child: Icon(Icons.savings_rounded)),
-                    Text(
-                      'Income',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-            child: const Icon(Icons.add_rounded),
-          ),
-          const SizedBox(
-            width: 8,
-          )
-        ],
         leading: IconButton(
             onPressed: () {}, icon: const Icon(Icons.bar_chart_rounded)),
       ),
       body: SingleChildScrollView(
-        child: Column(
+        child: Wrap(
           children: [
             MonthExpensesCard(),
             const CategoriesExpensesCard(),
@@ -161,6 +87,24 @@ class _FinancePageState extends ConsumerState<FinancePage> {
             const ExpenseIncomesChartCard(),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AddExpensePage(
+                isIncome: false,
+              ),
+            ),
+          ).then(
+            (_) {
+              setState(() {});
+            },
+          );
+        },
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add),
       ),
     );
   }

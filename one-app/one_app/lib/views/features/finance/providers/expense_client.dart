@@ -12,7 +12,10 @@ class ExpenseApiClient {
 
   Future<List<Category>> getExpenseCategories() async {
     try {
-      final response = await supabase.from('expense_categories').select();
+      final response = await supabase
+          .from('expense_categories')
+          .select()
+          .order('name', ascending: true);
       return List<Category>.from(response.map((x) => Category.fromJson(x)));
     } catch (e) {
       throw Exception('Failed to load data');
@@ -21,7 +24,10 @@ class ExpenseApiClient {
 
   Future<List<Category>> getIncomeCategories() async {
     try {
-      final response = await supabase.from('income_categories').select();
+      final response = await supabase
+          .from('income_categories')
+          .select()
+          .order('name', ascending: true);
       return List<Category>.from(response.map((x) => Category.fromJson(x)));
     } catch (e) {
       throw Exception('Failed to load data');

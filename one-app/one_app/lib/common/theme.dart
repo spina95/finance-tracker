@@ -14,7 +14,14 @@ ThemeData lightTheme = ThemeData(
   appBarTheme: const AppBarTheme(
     elevation: 20,
     color: Colors.white,
+    centerTitle: true,
+    toolbarHeight: 40,
     surfaceTintColor: Colors.white,
+    titleTextStyle: TextStyle(
+      fontWeight: FontWeight.bold,
+      color: Colors.black,
+      fontSize: 16,
+    ),
   ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     elevation: 5,
@@ -35,9 +42,16 @@ ThemeData darkTheme = ThemeData(
   cardColor: const Color.fromARGB(255, 44, 44, 44),
   splashColor: Colors.transparent,
   appBarTheme: const AppBarTheme(
-    elevation: 5,
+    elevation: 20,
+    centerTitle: true,
+    toolbarHeight: 40,
     color: Color.fromARGB(255, 32, 32, 32),
     surfaceTintColor: Color.fromARGB(255, 28, 43, 56),
+    titleTextStyle: TextStyle(
+      fontWeight: FontWeight.bold,
+      color: Colors.white,
+      fontSize: 16,
+    ),
   ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     elevation: 20,
